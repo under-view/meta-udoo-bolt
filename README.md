@@ -22,10 +22,10 @@ BSP designed specifically for the UDOO bolt (AMD Ryzen™ Embedded V1000 SoC)
 ## Build/Install
 
 ```
-bitbake-layers add-layer ../meta-openembedded/meta-oe/
-bitbake-layers add-layer ../meta-openembedded/meta-python
-bitbake-layers add-layer ../meta-openembedded/meta-networking
-bitbake-layers add-layer ../meta-amd/meta-amd-bsp/
-bitbake-layers add-layer ../meta-udoo-bolt
-MACHINE="udoo-bolt" DISTRO="udoo" bitbake core-image-base
+$ bitbake-layers add-layer ../meta-openembedded/meta-oe/
+$ bitbake-layers add-layer ../meta-openembedded/meta-python
+$ bitbake-layers add-layer ../meta-openembedded/meta-networking
+$ bitbake-layers add-layer ../meta-amd/meta-amd-bsp/
+$ bitbake-layers add-layer ../meta-udoo-bolt
+$ MACHINE="udoo-bolt" DISTRO="udoo" bitbake core-image-base
 ```
