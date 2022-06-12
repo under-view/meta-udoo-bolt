@@ -29,3 +29,10 @@ $ bitbake-layers add-layer ../meta-amd/meta-amd-bsp/
 $ bitbake-layers add-layer ../meta-udoo-bolt
 $ MACHINE="udoo-bolt" DISTRO="udoo" bitbake core-image-base
 ```
+
+## Flashing
+
+**USB Drive**
+```
+$ sudo bmaptool copy --bmap tmp/deploy/images/udoo-bolt/core-image-base-udoo-bolt.wic.bmap tmp/deploy/images/udoo-bolt/core-image-base-udoo-bolt.wic.gz <block device>
+```
