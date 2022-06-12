@@ -12,6 +12,8 @@
 # the option is a question of removing the # character and making any change to the
 # variable as required.
 
+DISTRO = "udoo"
+
 #
 # Machine Selection
 #
@@ -27,7 +29,7 @@
 #MACHINE ?= "qemux86-64"
 #
 # This sets the default machine to be qemux86-64 if no other machine is selected:
-MACHINE ??= "qemux86-64"
+MACHINE ??= "udoo-bolt"
 
 #
 # Where to place downloads
