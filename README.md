@@ -1,12 +1,13 @@
 # meta-udoo-bolt
 
-BSP designed specifically for the UDOO bolt (AMD Ryzen™ Embedded V1000 SoC)
+BSP designed specifically for the UDOO bolt (AMD Ryzen™ Embedded V1000 SoC). Useful notes can be found on the [wiki
+page](https://github.com/under-view/meta-udoo-bolt/wiki).
 
 ## Dependencies
 
 [Yocto project build host packages](https://docs.yoctoproject.org/brief-yoctoprojectqs/index.html#build-host-packages)
 
-* URI: https://github.com/openembedded/openembedded-core
+* URI: https://git.openembedded.org/openembedded-core
     * branch: kirkstone
     * revision: HEAD
 * URI: https://github.com/openembedded/bitbake
