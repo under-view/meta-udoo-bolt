@@ -4,4 +4,3 @@
 # var e.g. bootloader, initrd & kernel.
 
 part /boot --source bootimg-partition --ondisk sda --fstype=vfat --label boot --overhead-factor 1.0 --active --align 1024
-part / --source rootfs --ondisk sda --fstype=ext4 --size=1000M --label udoo-bolt-rootfs --align 4096
