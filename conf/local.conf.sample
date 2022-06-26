@@ -241,3 +241,9 @@ PACKAGECONFIG:append:pn-nativesdk-qemu = " sdl"
 CONF_VERSION = "2"
 
 EXTRA_IMAGE_FEATURES:append = " ssh-server-openssh empty-root-password allow-root-login"
+GRUB_TIMEOUT = "1"
+IMAGE_INSTALL:append = "\
+  util-linux-lsblk usbutils parted e2fsprogs-resize2fs \
+  pciutils systemd-analyze git vim htop iotop \
+  diffutils \
+"
