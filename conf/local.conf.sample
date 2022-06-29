@@ -29,7 +29,7 @@ DISTRO = "udoo"
 #MACHINE ?= "qemux86-64"
 #
 # This sets the default machine to be qemux86-64 if no other machine is selected:
-MACHINE ??= "udoo-bolt-usbimage"
+MACHINE = "udoo-bolt-usbimage"
 
 #
 # Where to place downloads
@@ -241,7 +241,6 @@ PACKAGECONFIG:append:pn-nativesdk-qemu = " sdl"
 CONF_VERSION = "2"
 
 EXTRA_IMAGE_FEATURES:append = " ssh-server-openssh empty-root-password allow-root-login"
-GRUB_TIMEOUT = "1"
 IMAGE_INSTALL:append = "\
   util-linux-lsblk usbutils parted e2fsprogs-resize2fs \
   pciutils systemd-analyze git vim htop iotop \
