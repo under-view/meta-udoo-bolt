@@ -2,8 +2,6 @@ require conf/machine/v1000.conf
 
 IMAGE_CLASSES += "efi-boot-populate"
 
-INITRAMFS_FSTYPES = "ext4"
-
 # We only support IMAGE_FSTYPES "wic"
 IMAGE_FSTYPES = "ext4 wic wic.gz wic.bmap"
 
