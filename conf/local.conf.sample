@@ -240,6 +240,10 @@ PACKAGECONFIG:append:pn-nativesdk-qemu = " sdl"
 # this doesn't mean anything to you.
 CONF_VERSION = "2"
 
+# CPU core count / 2
+PARALLEL_MAKE = "-j 8"
+BB_NUMBER_THREADS = "8"
+
 EXTRA_IMAGE_FEATURES:append = " ssh-server-openssh empty-root-password allow-root-login"
 IMAGE_INSTALL:append = "\
   util-linux-lsblk usbutils parted e2fsprogs-resize2fs \
