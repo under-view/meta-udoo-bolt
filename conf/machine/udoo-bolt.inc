@@ -14,6 +14,7 @@ IMAGE_BOOT_FILES = "\
 
 # This makes sure that boot files are deployed before do_image_wic starts execution
 do_image_wic[depends] += "${IMAGE_BASENAME}:do_bootimg"
+do_image_wic[vardeps] += "BOLT_ROOT_DEVICE KERNEL_IMAGETYPE"
 
 PREFERRED_PROVIDER_virtual/kernel ?= "linux-yocto"
 PREFERRED_VERSION_linux-yocto ?= "5.15%"
