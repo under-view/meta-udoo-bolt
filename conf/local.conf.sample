@@ -29,7 +29,7 @@ DISTRO = "udoo"
 #MACHINE ?= "qemux86-64"
 #
 # This sets the default machine to be qemux86-64 if no other machine is selected:
-MACHINE = "udoo-bolt-usbimage"
+MACHINE ?= "udoo-bolt-live-usb"
 
 #
 # Where to place downloads
