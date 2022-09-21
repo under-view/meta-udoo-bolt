@@ -1,0 +1,39 @@
+From 4c2d555e9eb6e7e567b0cef25d317abb2458dfe8 Mon Sep 17 00:00:00 2001
+From: Vincent Davis Jr <vince@underview.tech>
+Date: Tue, 20 Sep 2022 23:48:50 -0500
+Subject: [PATCH] meson: libdrm only enable amdgpu radeon
+
+Upstream-Status: Inappropriate
+
+Signed-off-by: Vincent Davis Jr <vince@underview.tech>
+---
+ meson.build | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/meson.build b/meson.build
+index 4d365a272bc..83f69123374 100644
+--- a/meson.build
++++ b/meson.build
+@@ -1574,10 +1574,10 @@ _drm_intel_ver = '2.4.75'
+ _drm_ver = '2.4.109'
+
+ _libdrm_checks = [
+-  ['intel', with_gallium_i915],
++#  ['intel', with_gallium_i915],
+   ['amdgpu', (with_amd_vk and not with_platform_windows) or with_gallium_radeonsi],
+   ['radeon', (with_gallium_radeonsi or with_gallium_r300 or with_gallium_r600)],
+-  ['nouveau', with_gallium_nouveau],
++#  ['nouveau', with_gallium_nouveau],
+ ]
+
+ # Loop over the enables versions and get the highest libdrm requirement for all
+@@ -1654,6 +1654,7 @@ else
+   _llvm_version = '>= 3.9.0'
+ endif
+
++
+ _shared_llvm = get_option('shared-llvm')
+ if _shared_llvm == 'true'
+   _shared_llvm = 'enabled'
+--
+2.34.1
