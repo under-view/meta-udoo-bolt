@@ -6,8 +6,7 @@ PACKAGECONFIG[gallium] = "-Dgallium-drivers=${@strip_comma('${GALLIUM_DRIVERS}')
 PACKAGECONFIG[vulkan] = "-Dvulkan-drivers=amd,-Dvulkan-drivers='',"
 
 PACKAGECONFIG:append = "\
-  gallium-llvm \
-  ${@bb.utils.contains('DISTRO_FEATURES', 'vulkan', 'vulkan', '', d)} \
+  ${@bb.utils.contains('DISTRO_FEATURES', 'vulkan', 'gallium-llvm vulkan', '', d)} \
   "
 
 # meson configure fails due to llvm-config --shared-mode failing to find libs in ${STAGING_LIBDIR}
