@@ -1,4 +1,6 @@
-require conf/machine/v1000.conf
+PREFERRED_PROVIDER_virtual/kernel ?= "${@bb.utils.contains('RT_KERNEL_AMD', 'yes', "linux-yocto-rt", "linux-yocto", d)}"
+PREFERRED_VERSION_linux-yocto ?= "5.15%"
+PREFERRED_VERSION_linux-yocto-rt ?= "5.15%"
 
 IMAGE_CLASSES += "efi-boot-populate"
 
@@ -15,7 +17,3 @@ IMAGE_BOOT_FILES = "\
 # This makes sure that boot files are deployed before do_image_wic starts execution
 do_image_wic[depends] += "${IMAGE_BASENAME}:do_bootimg"
 do_image_wic[vardeps] += "BOLT_ROOT_DEVICE KERNEL_IMAGETYPE"
-
-PREFERRED_PROVIDER_virtual/kernel ?= "linux-yocto"
-PREFERRED_VERSION_linux-yocto ?= "5.15%"
-PREFERRED_VERSION_linux-yocto-rt ?= "5.15%"
