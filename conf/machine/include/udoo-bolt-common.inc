@@ -12,7 +12,7 @@ IMAGE_BOOT_FILES = "\
   ${EFIIMGDIR}${EFIDIR}/*;EFI/BOOT/ \
   ${EFIIMGDIR}/startup.nsh;startup.nsh \
   ${KERNEL_IMAGETYPE} \
-"
+  "
 
 # This makes sure that boot files are deployed before do_image_wic starts execution
 do_image_wic[depends] += "${IMAGE_BASENAME}:do_bootimg"
@@ -20,3 +20,9 @@ do_image_wic[vardeps] += "BOLT_ROOT_DEVICE KERNEL_IMAGETYPE"
 
 UDOO_BOLT_ESSENTIAL_EXTRA_RDEPENDS ?= ""
 MACHINE_ESSENTIAL_EXTRA_RDEPENDS = "linux-firmware-amdgpu ${UDOO_BOLT_ESSENTIAL_EXTRA_RDEPENDS}"
+
+XSERVER ?= "\
+  xserver-xorg \
+  xf86-input-evdev \
+  xf86-video-amdgpu \
+  "
