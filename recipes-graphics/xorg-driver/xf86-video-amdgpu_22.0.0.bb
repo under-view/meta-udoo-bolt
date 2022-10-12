@@ -14,7 +14,7 @@ DEPENDS += "virtual/libx11 libdrm virtual/libgbm xorgproto"
 
 PACKAGECONFIG ??= "udev glamor"
 PACKAGECONFIG[udev] = "--enable-udev,--disable-udev,udev"
-PACKAGECONFIG[glamor] = "--enable-glamor,--disable-glamor,libepoxy virtual/libgbm,libegl"
+PACKAGECONFIG[glamor] = "--enable-glamor,--disable-glamor"
 
 RRECOMMENDS:${PN} += "linux-firmware-amdgpu"
 
