@@ -1,0 +1,28 @@
+From 17191553b5edb3b2da6bd1d187b434b0d48be46d Mon Sep 17 00:00:00 2001
+From: Vincent Davis Jr <vince@underview.tech>
+Date: Sat, 22 Oct 2022 03:13:56 -0500
+Subject: [PATCH] meson[bug]: install eglplatform.h
+
+fix: mesa OE recipe sed can't find eglplatform.h
+
+Signed-off-by: Vincent Davis Jr <vince@underview.tech>
+---
+ include/meson.build | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/include/meson.build b/include/meson.build
+index 5cfbef5a48d..3d950e7f738 100644
+--- a/include/meson.build
++++ b/include/meson.build
+@@ -29,6 +29,8 @@ if with_android_stub
+   inc_include += [include_directories('android_stub')]
+ endif
+ 
++install_headers('EGL/eglplatform.h', subdir: 'EGL')
++
+ if not with_glvnd
+   if with_gles1 or with_gles2 or with_opengl or with_egl
+     install_headers('KHR/khrplatform.h', subdir : 'KHR')
+-- 
+2.34.1
+

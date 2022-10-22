@@ -25,4 +25,7 @@ XSERVER ?= "\
   xserver-xorg \
   xf86-input-evdev \
   xf86-video-amdgpu \
+  ${@bb.utils.contains('DISTRO_FEATURES', 'opengl', 'xserver-xorg-extension-glx', '', d)} \
   "
+
+OPENGLX_FEATURE_ENABLED ?= "${@bb.utils.contains('DISTRO_FEATURES', 'opengl x11', 'true', 'false', d)}"
