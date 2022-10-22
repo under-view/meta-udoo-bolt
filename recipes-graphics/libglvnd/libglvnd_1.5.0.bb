@@ -11,7 +11,7 @@ SRCREV = "c7cdf0cc4395b57563294d1f340b6bb1b95366a0"
 
 REQUIRED_DISTRO_FEATURES = "opengl"
 
-inherit meson pkgconfig features_check python3native
+inherit meson pkgconfig features_check
 
 S = "${WORKDIR}/git"
 
