@@ -3,6 +3,8 @@ From: Vincent Davis Jr <vince@underview.tech>
 Date: Sat, 22 Oct 2022 03:13:56 -0500
 Subject: [PATCH] meson[bug]: install eglplatform.h
 
+Upstream-Status: Inappropriate
+
 fix: mesa OE recipe sed can't find eglplatform.h
 
 Signed-off-by: Vincent Davis Jr <vince@underview.tech>
@@ -17,12 +19,11 @@ index 5cfbef5a48d..3d950e7f738 100644
 @@ -29,6 +29,8 @@ if with_android_stub
    inc_include += [include_directories('android_stub')]
  endif
- 
+
 +install_headers('EGL/eglplatform.h', subdir: 'EGL')
 +
  if not with_glvnd
    if with_gles1 or with_gles2 or with_opengl or with_egl
      install_headers('KHR/khrplatform.h', subdir : 'KHR')
--- 
+--
 2.34.1
-
