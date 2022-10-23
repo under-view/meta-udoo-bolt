@@ -1,6 +1,7 @@
 PREFERRED_PROVIDER_virtual/kernel ?= "${@bb.utils.contains('RT_KERNEL_AMD', 'yes', "linux-yocto-rt", "linux-yocto", d)}"
 PREFERRED_VERSION_linux-yocto ?= "5.15%"
 PREFERRED_VERSION_linux-yocto-rt ?= "5.15%"
+PREFERRED_PROVIDER_virtual/libglx ?= "mesa"
 
 IMAGE_CLASSES += "efi-boot-populate"
 
