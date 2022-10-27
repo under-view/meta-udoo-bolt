@@ -5,19 +5,17 @@ page](https://github.com/under-view/meta-udoo-bolt/wiki).
 
 ## Dependencies
 
-[Yocto project build host packages](https://docs.yoctoproject.org/brief-yoctoprojectqs/index.html#build-host-packages)
-
 * URI: https://git.openembedded.org/openembedded-core
-    * branch: kirkstone
-    * revision: HEAD
-* URI: https://github.com/openembedded/bitbake
     * branch: master
-    * revision: 2.0.1
-* URI: https://github.com/openembedded/meta-openembedded
-    * branch: kirkstone
+    * revision: HEAD
+* URI: https://git.openembedded.org/bitbake
+    * branch: master
+    * revision: HEAD
+* URI: https://git.openembedded.org/meta-openembedded
+    * branch: master
     * revision: HEAD
 * URI: https://git.yoctoproject.org/meta-amd
-    * branch: kirkstone
+    * branch: master
     * revision: HEAD
 
 ## Build/Install
