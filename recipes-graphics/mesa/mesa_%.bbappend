@@ -6,7 +6,7 @@ SRC_URI:append = "\
 
 GALLIUM_DRIVERS = "radeonsi,r300,r600"
 PACKAGECONFIG[gallium] = "-Dgallium-drivers=${@strip_comma('${GALLIUM_DRIVERS}')}, -Dgallium-drivers='', libdrm"
-PACKAGECONFIG[vulkan] = "-Dvulkan-drivers=amd,-Dvulkan-drivers='',"
+PACKAGECONFIG[vulkan] = "-Dvulkan-drivers=amd,-Dvulkan-drivers='',glslang-native vulkan-loader vulkan-headers"
 PACKAGECONFIG[openglx] = "-Dglvnd=true,-Dglvnd=false,libglvnd"
 
 PACKAGECONFIG:append = "\
