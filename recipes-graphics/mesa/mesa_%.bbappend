@@ -11,7 +11,8 @@ PACKAGECONFIG[openglx] = "-Dglvnd=true,-Dglvnd=false,libglvnd"
 
 PACKAGECONFIG:append = "\
   ${@bb.utils.contains('DISTRO_FEATURES', 'opengl x11', 'openglx', '', d)} \
-  ${@bb.utils.contains('DISTRO_FEATURES', 'vulkan', 'gallium-llvm vulkan', '', d)} \
+  ${@bb.utils.contains('DISTRO_FEATURES', 'vulkan', 'vulkan', '', d)} \
+  gallium-llvm \
   x11 \
   "
 
