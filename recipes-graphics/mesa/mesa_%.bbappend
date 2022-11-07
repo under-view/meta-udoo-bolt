@@ -13,7 +13,6 @@ PACKAGECONFIG:append = "\
   ${@bb.utils.contains('DISTRO_FEATURES', 'opengl x11', 'openglx', '', d)} \
   ${@bb.utils.contains('DISTRO_FEATURES', 'vulkan', 'vulkan', '', d)} \
   gallium-llvm \
-  x11 \
   "
 
 # meson configure fails. This is due to llvm-config --shared-mode failing to find libs in ${STAGING_LIBDIR}
