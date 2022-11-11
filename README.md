@@ -14,8 +14,8 @@ page](https://github.com/under-view/meta-udoo-bolt/wiki).
 * URI: https://git.openembedded.org/meta-openembedded
     * branch: master
     * revision: HEAD
-* URI: https://git.yoctoproject.org/meta-amd
-    * branch: master
+* URI: https://github.com/under-view/meta-amd
+    * branch: master-underview
     * revision: HEAD
 
 ## Build/Install
