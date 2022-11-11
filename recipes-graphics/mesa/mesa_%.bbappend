@@ -21,6 +21,11 @@ do_configure:prepend() {
   # libs are located at ${STAGING_EXECPREFIXDIR}/lib64. Symlink directories
   # so that the when llvm-config --libdir is called proper libraries are located.
   ln -fs ${STAGING_LIBDIR} ${STAGING_EXECPREFIXDIR}/lib
+
+  # RPATH on the llvm-config binary is set wrong which leads to
+  # llvm-config: error while loading shared libraries: libtinfo.so.5: cannot open shared object file: No such file or directory
+  # Which in turn leads to meson configure failures as the llvm-config version number isn't properly returned
+  chrpath --replace ${STAGING_BASELIBDIR} ${STAGING_BINDIR}/llvm-config
 }
 
 # added patch 0002-meson-bug-install-eglplatform.h.patch to bypass
