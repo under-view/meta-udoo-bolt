@@ -15,12 +15,12 @@ PACKAGECONFIG:append = "\
   gallium-llvm \
   "
 
-# meson configure fails. This is due to llvm-config --shared-mode failing to find libs in ${STAGING_LIBDIR}
-# function copies files from recipe-sysroot/usr/lib64 to recipe-sysroot/usr/lib where llvm-config
-# command can find libraries
 do_configure:prepend() {
-  install -d "${STAGING_LIBDIR}/../lib"
-  cp -ra ${STAGING_LIBDIR}/* ${STAGING_LIBDIR}/../lib
+  # mesa's meson requires the llvm-config --libdir command which in turn
+  # returns ${STAGING_EXECPREFIXDIR}/lib, but on an x86_64 bit machine
+  # libs are located at ${STAGING_EXECPREFIXDIR}/lib64. Symlink directories
+  # so that the when llvm-config --libdir is called proper libraries are located.
+  ln -fs ${STAGING_LIBDIR} ${STAGING_EXECPREFIXDIR}/lib
 }
 
 # added patch 0002-meson-bug-install-eglplatform.h.patch to bypass
