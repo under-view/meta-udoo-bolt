@@ -8,6 +8,8 @@ IMAGE_CLASSES += "efi-boot-populate"
 # We only support IMAGE_FSTYPES "wic"
 IMAGE_FSTYPES = "ext4 wic wic.gz wic.bmap"
 
+KERNEL_IMAGETYPE = "bzImage"
+
 # Contents of IMAGE_BOOT_FILES are deployed into "$WKS_FILES" wic image
 IMAGE_BOOT_FILES = "\
   ${EFIIMGDIR}${EFIDIR}/*;EFI/BOOT/ \
