@@ -1,26 +1,19 @@
-# The amdx86.inc file removes MACHINE_FEATURES = "screen",
-# Which unadds kernel config symbols CONFIG_DRM & CONFIG_AGP
-# for us. Unfortunately, setting MACHINE_FEATURES here just
-# gets overriden by the remove. So, we can't add DRM support.
-# Avoid usage of amdx86.inc by implemented v1000.conf &
-# amdx86.inc here.
-require conf/machine/include/tune-zen1.inc
-# require conf/machine/include/amdx86.inc
-require conf/machine/include/amd-common-configurations.inc
-include conf/machine/include/amd-customer-configurations.inc
+DEFAULTTUNE ?= "zen1"
+MULTILIBS ?= ""
 
-# Add machine specific AMD features and feature pkgs here
-EXTRA_IMAGE_FEATURES += "amd-feature-networking"
+require conf/machine/include/x86/arch-x86.inc
+require conf/machine/include/x86/x86-base.inc
+require conf/multilib.conf
 
-MACHINEOVERRIDES =. "amd:amdx86:"
+TUNEVALID[zen1] = "Enable AMD x86 (64 bit) Zen 1 Core Architecture specific optimizations"
+TUNECONFLICTS[zen1] = "m32 mx32"
 
-MACHINE_FEATURES += "screen screen-console"
+TUNE_CCARGS .= "${@bb.utils.contains('TUNE_FEATURES', 'zen1', ' -march=znver1', '', d)}"
+MACHINEOVERRIDES =. "${@bb.utils.contains('TUNE_FEATURES', 'zen1', 'zen1:', '', d)}amd:amdx86:"
 
-MACHINE_EXTRA_RRECOMMENDS:remove = " rtc-test"
+AVAILTUNES += "zen1"
+TUNE_FEATURES:tune-zen1         = "${TUNE_FEATURES:tune-x86-64} zen1"
+TUNE_PKGARCH:tune-zen1          = "zen1"
+PACKAGE_EXTRA_ARCHS:tune-zen1   = "${PACKAGE_EXTRA_ARCHS:tune-x86-64} zen1"
+BASE_LIB:tune-zen1              = "lib64"
 
-# Mask out recipes for packages we do not support for
-# amdx86 but may be required by others. Use '|' sign
-# between the patterns.
-BBMASK .= "\
-.*/meta-amd/common/recipes-support/libtinyxml\
-"
