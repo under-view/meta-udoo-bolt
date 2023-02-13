@@ -25,6 +25,7 @@ SRC_URI:append:amd = " \
       file://usb-serial.cfg \
       file://wdt-driver.cfg \
       ${@bb.utils.contains('MACHINE_FEATURES', 'ccp', 'file://amd-ccp.cfg', '', d)} \
+      ${@bb.utils.contains('ACPI_DEBUG', '1', 'file://enable-acpi-debug.cfg', '', d)} \
       ${@bb.utils.contains('MACHINE_FEATURES', 'screen', 'file://enable-graphics.cfg', 'file://disable-graphics.cfg', d)} \
       ${@bb.utils.contains('DISTRO_FEATURES', 'bluetooth', 'file://enable-bluetooth.cfg', 'file://disable-bluetooth.cfg', d)} \
       "
