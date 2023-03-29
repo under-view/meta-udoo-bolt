@@ -246,7 +246,7 @@ BB_NUMBER_THREADS = "8"
 
 EXTRA_IMAGE_FEATURES:append = " ssh-server-openssh empty-root-password allow-root-login"
 IMAGE_INSTALL:append = "\
-  util-linux-lsblk usbutils parted e2fsprogs-resize2fs \
-  pciutils systemd-analyze git vim htop iotop \
-  diffutils \
-"
+	util-linux-lsblk usbutils parted e2fsprogs-resize2fs \
+	pciutils systemd-analyze git vim htop iotop \
+	diffutils \
+	"

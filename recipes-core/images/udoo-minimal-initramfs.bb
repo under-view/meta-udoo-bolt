@@ -6,19 +6,19 @@ UDOO_INITRD_INSTALL ??= ""
 UDOO_INITRD_BASEUTILS ?= "busybox udev base-passwd"
 
 INITRAMFS_SCRIPTS ?= "\
-  initramfs-framework-base \
-  initramfs-module-setup-live \
-  initramfs-module-udev \
-  initramfs-module-install \
-  initramfs-module-install-efi \
-"
+    initramfs-framework-base \
+    initramfs-module-setup-live \
+    initramfs-module-udev \
+    initramfs-module-install \
+    initramfs-module-install-efi \
+    "
 
 PACKAGE_INSTALL = "\
-  ${INITRAMFS_SCRIPTS} \
-  ${UDOO_INITRD_BASEUTILS} \
-  ${ROOTFS_BOOTSTRAP_INSTALL} \
-  ${UDOO_INITRD_INSTALL} \
-"
+    ${INITRAMFS_SCRIPTS} \
+    ${UDOO_INITRD_BASEUTILS} \
+    ${ROOTFS_BOOTSTRAP_INSTALL} \
+    ${UDOO_INITRD_INSTALL} \
+    "
 
 IMAGE_FEATURES = ""
 IMAGE_LINGUAS = ""

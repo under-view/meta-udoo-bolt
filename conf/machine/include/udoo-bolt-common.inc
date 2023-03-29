@@ -22,20 +22,20 @@ MACHINE_EXTRA_RRECOMMENDS += "grub parted util-linux-blkid"
 MACHINE_ESSENTIAL_EXTRA_RDEPENDS = "linux-firmware-amdgpu ${UDOO_BOLT_ESSENTIAL_EXTRA_RDEPENDS}"
 
 XSERVER ?= "\
-  xserver-xorg \
-  xf86-input-evdev \
-  xf86-video-amdgpu \
-  ${@bb.utils.contains('DISTRO_FEATURES', 'opengl', 'xserver-xorg-extension-glx', '', d)} \
-  "
+    xserver-xorg \
+    xf86-input-evdev \
+    xf86-video-amdgpu \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'opengl', 'xserver-xorg-extension-glx', '', d)} \
+    "
 
 OPENGLX_FEATURE_ENABLED ?= "${@bb.utils.contains('DISTRO_FEATURES', 'opengl x11', 'true', 'false', d)}"
 
 # Contents of IMAGE_BOOT_FILES are deployed into "$WKS_FILES" wic image
 IMAGE_BOOT_FILES = "\
-  ${EFIIMGDIR}${EFIDIR}/*;EFI/BOOT/ \
-  ${EFIIMGDIR}/startup.nsh;startup.nsh \
-  ${KERNEL_IMAGETYPE} \
-  "
+    ${EFIIMGDIR}${EFIDIR}/*;EFI/BOOT/ \
+    ${EFIIMGDIR}/startup.nsh;startup.nsh \
+    ${KERNEL_IMAGETYPE} \
+    "
 
 # This makes sure that boot files are deployed before do_image_wic starts execution
 do_image_wic[depends] += "${IMAGE_BASENAME}:do_bootimg"
