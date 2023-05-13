@@ -12,8 +12,8 @@ TUNE_CCARGS .= "${@bb.utils.contains('TUNE_FEATURES', 'zen1', ' -march=znver1', 
 MACHINEOVERRIDES =. "${@bb.utils.contains('TUNE_FEATURES', 'zen1', 'zen1:', '', d)}amd:amdx86:"
 
 AVAILTUNES += "zen1"
-TUNE_FEATURES:tune-zen1         = "${TUNE_FEATURES:tune-x86-64} zen1"
-TUNE_PKGARCH:tune-zen1          = "zen1"
-PACKAGE_EXTRA_ARCHS:tune-zen1   = "${PACKAGE_EXTRA_ARCHS:tune-x86-64} zen1"
-BASE_LIB:tune-zen1              = "lib64"
+TUNE_FEATURES:tune-zen1       = "${TUNE_FEATURES:tune-x86-64} zen1"
+TUNE_PKGARCH:tune-zen1        = "zen1"
+PACKAGE_EXTRA_ARCHS:tune-zen1 = "${PACKAGE_EXTRA_ARCHS:tune-x86-64} zen1"
+BASE_LIB:tune-zen1            = "lib64"
 
