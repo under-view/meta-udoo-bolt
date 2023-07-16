@@ -1,7 +1,7 @@
 FILESEXTRAPATHS:prepend := "${THISDIR}/linux-yocto-6.1:"
 
 KMACHINE:amd ?= "common-pc-64"
-LINUX_VERSION:amd ?= "6.1.25"
+LINUX_VERSION:amd ?= "6.1.38"
 LINUX_VERSION_EXTENSION:amd ?= "-amd-${LINUX_KERNEL_TYPE}"
 
 COMPATIBLE_MACHINE = "${MACHINE}"
