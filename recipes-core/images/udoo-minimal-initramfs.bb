@@ -3,7 +3,7 @@ LICENSE = "MIT"
 
 UDOO_INITRD_INSTALL ??= ""
 
-UDOO_INITRD_BASEUTILS ?= "busybox udev base-passwd"
+UDOO_INITRD_BASEUTILS ?= "coreutils udev base-passwd"
 
 INITRAMFS_SCRIPTS ?= "\
     initramfs-framework-base \
