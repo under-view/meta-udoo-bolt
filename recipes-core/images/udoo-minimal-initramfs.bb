@@ -3,21 +3,18 @@ LICENSE = "MIT"
 
 UDOO_INITRD_INSTALL ??= ""
 
-UDOO_INITRD_BASEUTILS ?= "coreutils udev base-passwd"
-
 INITRAMFS_SCRIPTS ?= "\
     initramfs-framework-base \
     initramfs-module-setup-live \
     initramfs-module-udev \
-    initramfs-module-install \
-    initramfs-module-install-efi \
     "
 
 PACKAGE_INSTALL = "\
-    ${INITRAMFS_SCRIPTS} \
-    ${UDOO_INITRD_BASEUTILS} \
+    ${VIRTUAL-RUNTIME_base-utils} \
+    ${VIRTUAL-RUNTIME_dev_manager} \
     ${ROOTFS_BOOTSTRAP_INSTALL} \
     ${UDOO_INITRD_INSTALL} \
+    ${INITRAMFS_SCRIPTS} \
     "
 
 IMAGE_FEATURES = ""
@@ -28,8 +25,14 @@ COPY_LIC_DIRS = "0"
 
 KERNELDEPMODDEPEND = ""
 
-IMAGE_ROOTFS_SIZE = "32768"
-IMAGE_ROOTFS_EXTRA_SPACE = "0"
+# initrd/initramfs size in kilobytes
+# max 300000KB -> 300MB
+INITRAMFS_MAXSIZE ?= "300000"
+
+# Image size in megabytes
+# 8192MB -> 8GB
+IMAGE_ROOTFS_SIZE ?= "8192"
+IMAGE_ROOTFS_EXTRA_SPACE ?= "0"
 
 FORCE_RO_REMOVE ?= "1"
 
