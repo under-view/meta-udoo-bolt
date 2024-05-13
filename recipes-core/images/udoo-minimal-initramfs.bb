@@ -45,3 +45,4 @@ IMAGE_POSTPROCESS_COMMAND = ""
 # inherited class efi-boot-populate will cause udoo-minimal-initramfs to execute
 # do_bootimg which depends on do_image_ext4. The ext4 fs extension isn't in IMAGE_FSTYPES.
 deltask do_bootimg
+deltask do_image_ext3
