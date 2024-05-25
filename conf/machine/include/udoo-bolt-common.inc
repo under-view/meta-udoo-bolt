@@ -7,7 +7,6 @@ PREFERRED_PROVIDER_jpeg-native ?= "jpeg-native"
 ACPI_DEBUG ?= "0"
 ACPI_DEBUG_KERNEL_ARGS ?= "log_buf_len=16M acpi.debug_layer=0x00000002 acpi.debug_level=0x00000004"
 
-IMAGE_CLASSES += "efi-boot-populate"
 IMAGE_FSTYPES = "ext4 wic wic.gz wic.bmap"
 KERNEL_IMAGETYPE = "bzImage"
 
@@ -29,14 +28,3 @@ XSERVER ?= "\
     "
 
 OPENGLX_FEATURE_ENABLED ?= "${@bb.utils.contains('DISTRO_FEATURES', 'opengl x11', 'true', 'false', d)}"
-
-# Contents of IMAGE_BOOT_FILES are deployed into "$WKS_FILES" wic image
-IMAGE_BOOT_FILES = "\
-    ${EFIIMGDIR}${EFIDIR}/*;EFI/BOOT/ \
-    ${EFIIMGDIR}/startup.nsh;startup.nsh \
-    ${KERNEL_IMAGETYPE} \
-    "
-
-# This makes sure that boot files are deployed before do_image_wic starts execution
-do_image_wic[depends] += "${IMAGE_BASENAME}:do_bootimg"
-do_image_wic[vardeps] += "BOLT_ROOT_DEVICE KERNEL_IMAGETYPE KERNEL_ARGS"
