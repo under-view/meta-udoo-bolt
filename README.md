@@ -16,7 +16,7 @@ page](https://github.com/under-view/meta-udoo-bolt/wiki).
 
 ```
 $ bitbake-layers add-layer ../meta-udoo-bolt
-$ MACHINE="udoo-bolt-live-usb" DISTRO="udoo" bitbake core-image-base
+$ MACHINE="udoo-bolt-live-usb" DISTRO="udoo" bitbake liveusb-wic
 ```
 
 ## Flashing
