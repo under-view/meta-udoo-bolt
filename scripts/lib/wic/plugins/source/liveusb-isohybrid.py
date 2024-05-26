@@ -25,10 +25,10 @@ from wic.pluginbase import SourcePlugin
 from wic.misc import exec_cmd, exec_native_cmd, get_bitbake_var
 
 logger = logging.getLogger('wic')
-handler = logging.StreamHandler(stream=sys.stdout)
-logger.addHandler(handler)
+#handler = logging.StreamHandler(stream=sys.stdout)
+#logger.addHandler(handler)
 #logger.setLevel(logging.DEBUG)
-logger.setLevel(logging.INFO)
+#logger.setLevel(logging.INFO)
 
 class LiveusbIsohybrid(SourcePlugin):
     """
@@ -166,6 +166,12 @@ class LiveusbIsohybrid(SourcePlugin):
         shutil.copy(initrd, isodir + "/initrd", follow_symlinks=True)
 
     @staticmethod
+    def _install_rootfs(isodir):
+        rootfs = get_bitbake_var("ROOTFS")
+        if rootfs:
+            shutil.copy(rootfs, isodir + "/rootfs.img", follow_symlinks=True)
+
+    @staticmethod
     def _create_iso_image(isodir, iso_img, native_sysroot, part):
         iso_bootimg = "isolinux/isolinux.bin"
         iso_bootcat = "isolinux/boot.cat"
@@ -203,6 +209,7 @@ class LiveusbIsohybrid(SourcePlugin):
         cls._install_syslinux(isodir, kernel_dir, bootimg_dir)
         cls._install_kernel(isodir, kernel_dir)
         cls._install_initrd(isodir, kernel_dir)
+        cls._install_rootfs(isodir)
 
         iso_img = "%s/tempiso_img.iso" % cr_workdir
         cls._create_iso_image(isodir, iso_img, native_sysroot, part)
