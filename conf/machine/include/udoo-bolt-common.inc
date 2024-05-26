@@ -7,7 +7,6 @@ PREFERRED_PROVIDER_jpeg-native ?= "jpeg-native"
 ACPI_DEBUG ?= "0"
 ACPI_DEBUG_KERNEL_ARGS ?= "log_buf_len=16M acpi.debug_layer=0x00000002 acpi.debug_level=0x00000004"
 
-IMAGE_FSTYPES = "ext4 wic wic.gz wic.bmap"
 KERNEL_IMAGETYPE = "bzImage"
 
 UDOO_BOLT_ESSENTIAL_EXTRA_RDEPENDS ?= ""
