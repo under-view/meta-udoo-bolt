@@ -1,0 +1,5 @@
+part bios_boot  --label bios_boot  --fstype none --fixed-size 1M  --part-type EF02
+part efi_system --label efi_system --fstype vfat --fixed-size 48M --part-type EF00
+part grub_data  --label grub_data  --fstype ext4 --fixed-size 78M --part-type 8300
+part roots      --label rootfs     --fstype ext4 --source rootfs
+bootloader --ptable gpt
