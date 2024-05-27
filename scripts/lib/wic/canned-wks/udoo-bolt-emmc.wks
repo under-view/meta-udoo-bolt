@@ -1,7 +1,0 @@
-# short-description: Create an EFI disk image without any swap with files from var IMAGE_BOOT_FILES
-# long-description: Creates a partitioned EFI disk image without any swap from var IMAGE_BOOT_FILES
-# that the user can directly dd to the BOLTS eMMC.
-
-part /boot --source bootimg-partition --sourceparams="loader=grub-efi" --ondisk mmcblk0 --label boot --part-type EF00 --active --align 1024 --use-uuid --fixed-size 128M
-part / --source rootfs --ondisk mmcblk0 --fstype=ext4 --label rootfs --align 4096
-bootloader --ptable gpt
