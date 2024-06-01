@@ -172,6 +172,20 @@ class LiveusbIsohybrid(SourcePlugin):
             shutil.copy(rootfs, isodir + "/rootfs.img", follow_symlinks=True)
 
     @staticmethod
+    def _install_grub(isodir, kernel_dir, native_sysroot):
+        print(kernel_dir + "/grub-bios")
+        print(kernel_dir + "/grub-efi")
+
+        installer_script = get_bitbake_var("LIVEUSB_INCLUDE_INSTALLER_SCRIPT")
+        if installer_script == "1":
+            cp_cmd = "cp -ra %s %s" % (kernel_dir + "/grub-bios", isodir)
+            exec_native_cmd(cp_cmd, native_sysroot)
+
+            cp_cmd = "cp -ra %s %s" % (kernel_dir + "/grub-efi", isodir)
+            exec_native_cmd(cp_cmd, native_sysroot)
+
+
+    @staticmethod
     def _create_iso_image(isodir, iso_img, native_sysroot, part):
         iso_bootimg = "isolinux/isolinux.bin"
         iso_bootcat = "isolinux/boot.cat"
@@ -209,6 +223,7 @@ class LiveusbIsohybrid(SourcePlugin):
         cls._install_syslinux(isodir, kernel_dir, bootimg_dir)
         cls._install_kernel(isodir, kernel_dir)
         cls._install_initrd(isodir, kernel_dir)
+        cls._install_grub(isodir, kernel_dir, native_sysroot)
         cls._install_rootfs(isodir)
 
         iso_img = "%s/tempiso_img.iso" % cr_workdir
