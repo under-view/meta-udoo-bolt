@@ -20,9 +20,9 @@ inherit deploy
 do_deploy() {
     install -d ${DEPLOYDIR}/bootloader-extra
 
-    install -m 0644 "${WORKDIR}/amd.jpg" ${DEPLOYDIR}/bootloader-extra
-    install -m 0644 "${WORKDIR}/grub.cfg" ${DEPLOYDIR}/bootloader-extra/grub.cfg
-    install -m 0644 "${WORKDIR}/isolinux.cfg" ${DEPLOYDIR}/bootloader-extra/isolinux.cfg
+    install -m 0644 "${UNPACKDIR}/amd.jpg" ${DEPLOYDIR}/bootloader-extra
+    install -m 0644 "${UNPACKDIR}/grub.cfg" ${DEPLOYDIR}/bootloader-extra/grub.cfg
+    install -m 0644 "${UNPACKDIR}/isolinux.cfg" ${DEPLOYDIR}/bootloader-extra/isolinux.cfg
 
     MENU_ENTRY="${@bb.utils.contains("MACHINE", "udoo-bolt-live-usb", "liveusb", "emmc", d)}"
 
