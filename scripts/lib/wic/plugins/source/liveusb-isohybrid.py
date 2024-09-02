@@ -166,8 +166,10 @@ class LiveusbIsohybrid(SourcePlugin):
         shutil.copy(initrd, isodir + "/initrd", follow_symlinks=True)
 
     @staticmethod
-    def _install_rootfs(isodir):
-        rootfs = get_bitbake_var("ROOTFS")
+    def _install_rootfs(isodir, kernel_dir, native_sysroot):
+        cmd = "ls %s" % (get_bitbake_var("IMGDEPLOYDIR") + "/*.ext4")
+        ret, output = exec_native_cmd(cmd, native_sysroot)
+        rootfs = output.split()[0]
         if rootfs:
             shutil.copy(rootfs, isodir + "/rootfs.img", follow_symlinks=True)
 
@@ -224,7 +226,7 @@ class LiveusbIsohybrid(SourcePlugin):
         cls._install_kernel(isodir, kernel_dir)
         cls._install_initrd(isodir, kernel_dir)
         cls._install_grub(isodir, kernel_dir, native_sysroot)
-        cls._install_rootfs(isodir)
+        cls._install_rootfs(isodir, kernel_dir, native_sysroot)
 
         iso_img = "%s/tempiso_img.iso" % cr_workdir
         cls._create_iso_image(isodir, iso_img, native_sysroot, part)
