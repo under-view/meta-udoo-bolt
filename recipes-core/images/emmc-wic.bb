@@ -18,5 +18,4 @@ do_image_wic[depends] += "dosfstools-native:do_populate_sysroot \
                           gptfdisk-native:do_populate_sysroot \
                           bootloader-extra:do_deploy \
                           virtual/kernel:do_deploy \
-                          ${@'%s:do_image_%s' % (d.getVar('INITRD'), 'cpio') if d.getVar('INITRD') else ''} \
                           "
