@@ -18,16 +18,12 @@ do_deploy() {
     install -m 0644 "${THISDIR}/files/grub.cfg" ${DEPLOYDIR}/bootloader-extra/grub.cfg
     install -m 0644 "${THISDIR}/files/isolinux.cfg" ${DEPLOYDIR}/bootloader-extra/isolinux.cfg
 
-    MENU_ENTRY="${@bb.utils.contains("MACHINE", "udoo-bolt-live-usb", "liveusb", "emmc", d)}"
-
     sed -i -e "s#@KERNEL_IMAGETYPE@#${KERNEL_IMAGETYPE}#g" \
            -e "s#@KERNEL_ARGS@#${KERNEL_ARGS}#g" \
-           -e "s#@MENU_ENTRY@#${MENU_ENTRY}#g" \
               ${DEPLOYDIR}/bootloader-extra/grub.cfg
 
     sed -i -e "s#@KERNEL_IMAGETYPE@#${KERNEL_IMAGETYPE}#g" \
            -e "s#@KERNEL_ARGS@#${KERNEL_ARGS}#g" \
-           -e "s#@MENU_ENTRY@#${MENU_ENTRY}#g" \
               ${DEPLOYDIR}/bootloader-extra/isolinux.cfg
 }
 

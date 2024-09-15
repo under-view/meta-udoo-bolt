@@ -4,9 +4,7 @@ LICENSE = "MIT"
 UDOO_INITRD_INSTALL ??= ""
 
 INITRAMFS_SCRIPTS ?= "\
-    initramfs-framework-base \
-    initramfs-module-setup-live \
-    initramfs-module-udev \
+    udoo-minimal-init \
     "
 
 PACKAGE_INSTALL = "\
