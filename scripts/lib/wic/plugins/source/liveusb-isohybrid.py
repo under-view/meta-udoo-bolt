@@ -106,9 +106,8 @@ class LiveusbIsohybrid(SourcePlugin):
         install_cmd += "%s/vesamenu.c32" % isolinux_dir
         exec_cmd(install_cmd)
 
-
     @staticmethod
-    def _install_grub_efi(isodir, kernel_dir):
+    def _install_grub_efi(isodir, kernel_dir, native_sysroot):
         bootloader_extra_dir = "%s/bootloader-extra" % kernel_dir
 
         target_dir = "%s/EFI/BOOT" % isodir
@@ -144,6 +143,10 @@ class LiveusbIsohybrid(SourcePlugin):
         shutil.copy(grub_src, grub_target, follow_symlinks=True)
         shutil.copy(grub_cfg_src, grub_cfg_target, follow_symlinks=True)
         shutil.copy(amd_jpg_src, amd_jpg_target, follow_symlinks=True)
+
+        # Create startup script
+        uefi_script = "printf 'fs0:/EFI/BOOT/%s' > %s/startup.nsh" % (grub_dest_image,isodir)
+        exec_native_cmd(uefi_script, native_sysroot)
 
     @staticmethod
     def _install_efi_image(isodir, kernel_dir, native_sysroot, source_params, part):
@@ -198,9 +201,6 @@ class LiveusbIsohybrid(SourcePlugin):
 
     @staticmethod
     def _install_grub(isodir, kernel_dir, native_sysroot):
-        print(kernel_dir + "/grub-bios")
-        print(kernel_dir + "/grub-efi")
-
         installer_script = get_bitbake_var("LIVEUSB_INCLUDE_INSTALLER_SCRIPT")
         if installer_script == "1":
             cp_cmd = "cp -ra %s %s" % (kernel_dir + "/grub-bios", isodir)
@@ -208,7 +208,6 @@ class LiveusbIsohybrid(SourcePlugin):
 
             cp_cmd = "cp -ra %s %s" % (kernel_dir + "/grub-efi", isodir)
             exec_native_cmd(cp_cmd, native_sysroot)
-
 
     @staticmethod
     def _create_iso_image(isodir, iso_img, native_sysroot, part):
@@ -243,7 +242,7 @@ class LiveusbIsohybrid(SourcePlugin):
         if os.path.exists(isodir):
             shutil.rmtree(isodir)
 
-        cls._install_grub_efi(isodir, kernel_dir)
+        cls._install_grub_efi(isodir, kernel_dir, native_sysroot)
         cls._install_efi_image(isodir, kernel_dir, native_sysroot, source_params, part)
         cls._install_syslinux(isodir, kernel_dir, bootimg_dir)
         cls._install_kernel(isodir, kernel_dir)
