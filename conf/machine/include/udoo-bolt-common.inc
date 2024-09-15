@@ -9,6 +9,8 @@ ACPI_DEBUG_KERNEL_ARGS ?= "log_buf_len=16M acpi.debug_layer=0x00000002 acpi.debu
 
 KERNEL_IMAGETYPE = "bzImage"
 
+BOLT_BLOCK_DEVICE ?= "/dev/mmcblk0"
+
 UDOO_BOLT_ESSENTIAL_EXTRA_RDEPENDS ?= ""
 
 # QEMU does not support some of the enhanced instructions available
