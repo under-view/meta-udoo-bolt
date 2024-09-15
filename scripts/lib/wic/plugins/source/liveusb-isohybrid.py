@@ -137,12 +137,8 @@ class LiveusbIsohybrid(SourcePlugin):
         grub_cfg_src = "%s/grub.cfg" % (bootloader_extra_dir)
         grub_cfg_target = "%s/grub.cfg" % (target_dir)
 
-        amd_jpg_src = "%s/amd.jpg" % (bootloader_extra_dir)
-        amd_jpg_target = "%s/amd.jpg" % (target_dir)
-
         shutil.copy(grub_src, grub_target, follow_symlinks=True)
         shutil.copy(grub_cfg_src, grub_cfg_target, follow_symlinks=True)
-        shutil.copy(amd_jpg_src, amd_jpg_target, follow_symlinks=True)
 
         # Create startup script
         uefi_script = "printf 'fs0:/EFI/BOOT/%s' > %s/startup.nsh" % (grub_dest_image,isodir)
