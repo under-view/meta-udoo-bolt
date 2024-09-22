@@ -204,6 +204,13 @@ class LiveusbIsohybrid(SourcePlugin):
             exec_native_cmd(cp_cmd, native_sysroot)
 
     @staticmethod
+    def _install_image_boot_files(isodir, kernel_dir, native_sysroot):
+        image_boot_files_dir = "%s/image-boot-files" % (kernel_dir)
+        if os.path.isdir(image_boot_files_dir):
+            cp_cmd = "cp -ra %s %s" % (image_boot_files_dir, isodir)
+            exec_native_cmd(cp_cmd, native_sysroot)
+
+    @staticmethod
     def _install_emmc_wic(isodir, kernel_dir, native_sysroot):
         emmc_wic = "%s/../udoo-bolt-emmc/emmc-wic-udoo-bolt-emmc.rootfs.wic.gz" % (kernel_dir)
         if os.path.isfile(emmc_wic):
@@ -254,6 +261,7 @@ class LiveusbIsohybrid(SourcePlugin):
         cls._install_kernel(isodir, kernel_dir)
         cls._install_initrd(isodir, kernel_dir)
         cls._install_grub(isodir, kernel_dir, native_sysroot)
+        cls._install_image_boot_files(isodir, kernel_dir, native_sysroot)
         cls._install_emmc_wic(isodir, kernel_dir, native_sysroot)
 
         iso_img = "%s/tempiso_img.iso" % cr_workdir
