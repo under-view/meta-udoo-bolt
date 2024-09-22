@@ -204,7 +204,7 @@ class LiveusbIsohybrid(SourcePlugin):
 
         grub_efi_dir = "%s/grub-efi" % (kernel_dir)
         if os.path.isdir(grub_efi_dir):
-            cp_cmd = "cp -ra %s %s" % (grub_bios_dir, isodir)
+            cp_cmd = "cp -ra %s %s" % (grub_efi_dir, isodir)
             exec_native_cmd(cp_cmd, native_sysroot)
 
     @staticmethod
