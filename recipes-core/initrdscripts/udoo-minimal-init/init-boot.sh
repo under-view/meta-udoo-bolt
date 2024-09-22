@@ -32,3 +32,7 @@ mount -v "${liveusb}1" "${liveusb_mnt}" || \
 
 # Install system image
 . /usr/local/bin/flash.sh
+
+echo "Installation finished reboot!"
+
+exec sh
