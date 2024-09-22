@@ -20,6 +20,7 @@ do_image_wic[depends] += "dosfstools-native:do_populate_sysroot \
                           grub-efi:do_deploy \
                           grub:do_deploy \
                           bootloader-extra:do_deploy \
+                          image-boot-files:do_deploy \
                           virtual/kernel:do_deploy \
                           ${@'%s:do_image_complete' % d.getVar('INITRD') if d.getVar('INITRD') else ''} \
                           ${@'%s:do_image_complete' % d.getVar('INITRD_INSTALL') if d.getVar('INITRD_INSTALL') else ''} \
