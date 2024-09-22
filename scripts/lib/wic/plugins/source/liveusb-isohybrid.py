@@ -184,16 +184,12 @@ class LiveusbIsohybrid(SourcePlugin):
     def _install_initrd(isodir, kernel_dir):
         machine = get_bitbake_var("MACHINE")
         initrd_name = get_bitbake_var("INITRD")
-        initrd = "%s/%s-%s.rootfs.cpio.gz" % (kernel_dir,initrd_name,machine)
-        shutil.copy(initrd, isodir + "/initrd", follow_symlinks=True)
+        initrd_install_name = get_bitbake_var("INITRD_INSTALL")
 
-    @staticmethod
-    def _install_rootfs(isodir, kernel_dir, native_sysroot):
-        cmd = "ls %s" % (get_bitbake_var("IMGDEPLOYDIR") + "/*.ext4")
-        ret, output = exec_native_cmd(cmd, native_sysroot)
-        rootfs = output.split()[0]
-        if rootfs:
-            shutil.copy(rootfs, isodir + "/rootfs.img", follow_symlinks=True)
+        initrd = "%s/%s-%s.rootfs.cpio.gz" % (kernel_dir,initrd_name,machine)
+        initrd_install = "%s/%s-%s.rootfs.cpio.gz" % (kernel_dir,initrd_install_name,machine)
+        shutil.copy(initrd, isodir + "/initrd", follow_symlinks=True)
+        shutil.copy(initrd_install, isodir + "/initrd-install", follow_symlinks=True)
 
     @staticmethod
     def _install_grub(isodir, kernel_dir, native_sysroot):
@@ -258,7 +254,6 @@ class LiveusbIsohybrid(SourcePlugin):
         cls._install_kernel(isodir, kernel_dir)
         cls._install_initrd(isodir, kernel_dir)
         cls._install_grub(isodir, kernel_dir, native_sysroot)
-        cls._install_rootfs(isodir, kernel_dir, native_sysroot)
         cls._install_emmc_wic(isodir, kernel_dir, native_sysroot)
 
         iso_img = "%s/tempiso_img.iso" % cr_workdir
