@@ -12,17 +12,21 @@ page](https://github.com/under-view/meta-udoo-bolt/wiki).
     * branch: master
     * revision: HEAD
 
-## Build/Install
+## Build
 
 ```
 $ bitbake-layers add-layer ../meta-udoo-bolt
-$ MACHINE="udoo-bolt-live-usb" DISTRO="udoo" bitbake liveusb-wic
+
+# Require by liveusb-wic for the installation of system image
 $ MACHINE="udoo-bolt-emmc" DISTRO="udoo" bitbake emmc-wic
+
+# Liveusb can ether install emmc-wic or run standalone
+$ MACHINE="udoo-bolt-live-usb" DISTRO="udoo" bitbake liveusb-wic
 ```
 
 ## Flashing
 
 **USB Drive**
 ```
-$ sudo bmaptool copy --bmap tmp/deploy/images/udoo-bolt-live-usb/core-image-base-udoo-bolt-live-usb.wic.bmap tmp/deploy/images/udoo-bolt-live-usb/core-image-base-udoo-bolt-live-usb.wic.gz <block device>
+$ sudo bmaptool copy --bmap tmp/deploy/images/udoo-bolt-live-usb/liveusb-wic-udoo-bolt-live-usb.rootfs.wic.bmap tmp/deploy/images/udoo-bolt-live-usb/liveusb-wic-udoo-bolt-live-usb.rootfs.wic.gz <block device>
 ```
