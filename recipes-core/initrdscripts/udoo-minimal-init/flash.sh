@@ -86,7 +86,10 @@ mount -v "${grub_data}" "${data_dir}" || \
 	exec sh
 }
 
+mkdir -p "${efi_dir}/EFI/BOOT"
 mkdir -p "${data_dir}/boot/grub"
+
+cp -av "${efi_dir}/EFI/GRUB/grubx64.efi" "${efi_dir}/EFI/BOOT/BOOTX64.EFI"
 cp -av "${liveusb_mnt}/image-boot-files/grub.cfg" "${data_dir}/boot/grub/grub.cfg"
 
 umount "${efi_dir}"
