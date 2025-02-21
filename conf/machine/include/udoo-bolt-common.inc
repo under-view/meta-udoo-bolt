@@ -1,6 +1,6 @@
 PREFERRED_PROVIDER_virtual/kernel ?= "linux-yocto"
-PREFERRED_VERSION_linux-yocto ?= "6.6%"
-PREFERRED_VERSION_linux-yocto-rt ?= "6.6%"
+PREFERRED_VERSION_linux-yocto ?= "6.12%"
+PREFERRED_VERSION_linux-yocto-rt ?= "6.12%"
 PREFERRED_PROVIDER_jpeg ?= "jpeg"
 PREFERRED_PROVIDER_jpeg-native ?= "jpeg-native"
 
