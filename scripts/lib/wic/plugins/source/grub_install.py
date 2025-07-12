@@ -37,13 +37,26 @@ class GrubInstall(SourcePlugin):
     of either legacy bios or UEFI firmware or both with the disk partition
     table format being either GPT or MBR based.
 
-    ****************** Wic Plugin Depends ******************
+    ****************** Wic Plugin Depends/Vars ******************
     do_image_wic[depends] += "\
         grub-native:do_populate_sysroot \
         grub:do_populate_sysroot \
-        grub-efi:do_populate_sysroot\
+        grub-efi:do_populate_sysroot \
         "
-    ****************** Wic Plugin Depends ******************
+
+    # Optional variables
+    GRUB_PREFIX_PATH = '/boot/grub2'
+    GRUB_MKIMAGE_FORMAT_PC = 'i386-pc'
+    GRUB_MKIMAGE_FORMAT_EFI = 'x86_64-efi'
+    GRUB_CONFIG_PATH = "${DEPLOY_DIR_IMAGE}/grub.cfg"
+
+    WICVARS:append = "\
+        GRUB_CONFIG_PATH \
+        GRUB_PREFIX_PATH \
+        GRUB_MKIMAGE_FORMAT_PC \
+        GRUB_MKIMAGE_FORMAT_EFI \
+        "
+    ****************** Wic Plugin Depends/Vars ******************
 
 
     ******************* Example kickstart Legacy Bios Boot *******************
@@ -87,18 +100,18 @@ class GrubInstall(SourcePlugin):
 
     name = 'grub_install'
 
-    core_img = ''
+    boot_type = ''
+    grub_cfg = ''
+    grub_prefix_path = ''
 
     @staticmethod
-    def gen_embed_grub_cfg(kernel_dir, grub_cfg_target_path):
-        # Create grub config that's embedded into
-        # core.img. So, that core.img knows where
-        # to search for grub.cfg and normal.mod.
-        if not grub_cfg_target_path:
-            grub_cfg_target_path = '/boot/grub/grub.cfg'
-        embed_cfg_str = 'search.file %s root\n' % (grub_cfg_target_path)
-        embed_cfg_str += 'set prefix=($root)/boot/grub\n'
-        embed_cfg_str += 'configfile ($root)%s\n' % (grub_cfg_target_path) 
+    def gen_embed_grub_cfg(kernel_dir, grub_prefix_path):
+        # Create grub config that'll later be embedded
+        # into core.img. So, that core.img knows where
+        # to search for grub.cfg.
+        embed_cfg_str = 'search.file %s/grub.cfg root\n' % (grub_prefix_path)
+        embed_cfg_str += 'set prefix=($root)%s\n' % (grub_prefix_path)
+        embed_cfg_str += 'configfile ($root)%s/grub.cfg\n' % (grub_prefix_path)
         with open('%s/embed.cfg' % (kernel_dir), 'w+') as f:
             f.write(embed_cfg_str)
 
@@ -124,22 +137,27 @@ class GrubInstall(SourcePlugin):
     @staticmethod
     def gen_core_img_efi(kernel_dir, native_sysroot,
                          staging_libdir, mkimage_format):
+
         builtin_modules = 'boot linux ext2 fat serial part_msdos part_gpt normal \
         normal multiboot efi_gop iso9660 configfile search loadenv test'
 
-        # Generate core.img or grub stage 1.5
+        # Generate core.img or grub UEFI application
+        # that contains the embedded grub config.
+        #
+        # This is subject to change as OE-core grub-efi
+        # recipes generates core.img. May be able to
+        # leverage that work in the future.
         if not mkimage_format:
             mkimage_format = 'x86_64-efi'
 
         grub_mkimage_bios = 'grub-mkimage --prefix=/boot/grub \
         --format=%s --config=%s/embed.cfg --directory=%s/grub/%s \
-        --output=%s/grub-bios-core.img %s' % \
+        --output=%s/grub-efi-boot.efi %s' % \
         (mkimage_format, kernel_dir, staging_libdir,
         mkimage_format, kernel_dir, builtin_modules)
 
         exec_native_cmd(grub_mkimage_bios, native_sysroot)
 
-    @classmethod
     @classmethod
     def do_configure_partition(cls, part, source_params, creator, cr_workdir,
                                oe_builddir, bootimg_dir, kernel_dir,
@@ -147,29 +165,51 @@ class GrubInstall(SourcePlugin):
         """
         Called before do_prepare_partition(), creates loader-specific config
         """
-        boot_type = ''
+
         boot_types = ['bios', 'uefi', 'hybrid-bios', 'hybrid-uefi', 'modules']
+
+        boot_type = source_params['boot_type']
 
         staging_libdir = get_bitbake_var('STAGING_LIBDIR')
 
-        # Optional variables to look for
+        # Optional variables
+        grub_cfg = get_bitbake_var('GRUB_CONFIG_PATH')
+        grub_prefix_path = get_bitbake_var('GRUB_PREFIX_PATH')
         mkimage_format_pc = get_bitbake_var('GRUB_MKIMAGE_FORMAT_PC')
         mkimage_format_efi = get_bitbake_var('GRUB_MKIMAGE_FORMAT_EFI')
-        grub_cfg_target_path = get_bitbake_var('GRUB_CONFIG_TARGET_PATH')
+
+        if not grub_cfg:
+            grub_cfg = creator.ks.bootloader.configfile
+        if not grub_prefix_path:
+            grub_prefix_path = '/boot/grub'
 
         if not source_params['boot_type'] in boot_types:
             raise WicError("grub_install requires a boot_type per partition.\n" \
                            "Examples: %s" % (boot_types))
 
-        boot_type = source_params['boot_type']
+        # Grub config copied in do_prepare_partition()
+        if not os.path.isfile(grub_cfg):
+            raise WicError("grub_install requires a grub config\n" \
+                           "Examples:\nset GRUB_CONFIG_PATH\n" \
+                           "bootloader --configfile in wks file")
 
-        cls.gen_embed_grub_cfg(kernel_dir, grub_cfg_target_path)
+        cls.boot_type = boot_type
+        cls.grub_cfg = grub_cfg
+        cls.grub_prefix_path = grub_prefix_path
+
+        cls.gen_embed_grub_cfg(kernel_dir, grub_prefix_path)
         cls.gen_core_img_pc(kernel_dir, native_sysroot,
                             staging_libdir, mkimage_format_pc)
         cls.gen_core_img_efi(kernel_dir, native_sysroot,
                              staging_libdir, mkimage_format_pc)
 
-        raise WicError("Succcess")
+    @classmethod
+    def install_grub_cfg(cls, wdir):
+        boot_types = ['uefi', 'bios', 'modules']
+
+        if cls.boot_type in boot_types:
+            os.mkdir('%s/%s', wdir, cls.grub_prefix_path)
+            shutil.copy(cls.grub_cfg, cls.grub_prefix_path, follow_symlink=True)
 
     @classmethod
     def do_prepare_partition(cls, part, source_params, creator, cr_workdir,
@@ -182,9 +222,20 @@ class GrubInstall(SourcePlugin):
 
         part_img = ''
 
-        sdir = "%s/sdir" % cr_workdir
-        if os.path.exists(sdir):
-            shutil.rmtree(sdir)
+        wdir = "%s/wdir" % cr_workdir
+        if os.path.exists(wdir):
+            shutil.rmtree(wdir)
+
+        os.mkdir(wdir)
+
+        # Install grub config
+        cls.install_grub_cfg(wdir)
+
+        logger.debug('Prepare boot partition using rootfs in %s', wdir)
+        part.prepare_rootfs(cr_workdir, oe_builddir, wdir,
+                            native_sysroot, False)
+
+        raise WicError("Succcess")
 
         du_cmd = "du -Lbks %s" % part_img
         out = exec_cmd(du_cmd)
