@@ -19,6 +19,7 @@ import shutil
 
 from wic import WicError
 from wic.engine import get_custom_config
+from wic.partition import Partition
 from wic.pluginbase import SourcePlugin
 from wic.misc import exec_cmd, exec_native_cmd, get_bitbake_var
 
@@ -26,9 +27,9 @@ logger = logging.getLogger('wic')
 handler = logging.StreamHandler(stream=sys.stdout)
 logger.addHandler(handler)
 logger.setLevel(logging.DEBUG)
-#logger.setLevel(logging.INFO)
 
 class GrubInstall(SourcePlugin):
+
     """
     Create a bootable wic image with grub as bootloader
 
@@ -133,6 +134,8 @@ class GrubInstall(SourcePlugin):
         mkimage_format, kernel_dir, builtin_modules)
 
         exec_native_cmd(grub_mkimage_bios, native_sysroot)
+
+        Partition.core_img = '%s/grub-bios-core.img' % (kernel_dir)
 
     @staticmethod
     def gen_core_img_efi(kernel_dir, native_sysroot,
@@ -260,3 +263,14 @@ class GrubInstall(SourcePlugin):
         #os.remove(disk.path)
         #shutil.copy2(iso_img, full_path_iso)
         #shutil.copy2(full_path_iso, full_path)
+
+# As this change is specific to the 'grub_install'
+# wics plugin no need to modify partition.py
+def prepare_rootfs_none(self, rootfs, cr_workdir, oe_builddir, rootfs_dir,                                                                                  
+                        native_sysroot, pseudo):
+    core_img = self.core_img
+    if core_img:
+        shutil.copy(core_img, rootfs)
+
+Partition.core_img = ''
+Partition.prepare_rootfs_none = prepare_rootfs_none
