@@ -12,10 +12,8 @@ WICVARS:append = "\
     ROOTFS \
     "
 
-do_image_wic[depends] += "dosfstools-native:do_populate_sysroot \
-                          mtools-native:do_populate_sysroot \
-                          util-linux-native:do_populate_sysroot \
-                          gptfdisk-native:do_populate_sysroot \
-                          bootloader-extra:do_deploy \
-                          virtual/kernel:do_deploy \
-                          "
+do_image_wic[depends] += "\
+    grub-native:do_populate_sysroot \
+    grub:do_populate_sysroot \
+    grub-efi:do_populate_sysroot \
+    "
