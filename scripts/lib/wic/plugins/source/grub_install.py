@@ -117,8 +117,8 @@ class GrubInstall(SourcePlugin):
             f.write(embed_cfg_str)
 
     @staticmethod
-    def gen_core_img_pc(kernel_dir, native_sysroot,
-                        staging_libdir, mkimage_format):
+    def gen_core_img_pc(kernel_dir, native_sysroot, staging_libdir,
+                        mkimage_format, grub_prefix_path):
 
         builtin_modules = 'boot linux ext2 serial part_msdos part_gpt \
         normal multiboot configfile search loadenv test'
@@ -127,19 +127,20 @@ class GrubInstall(SourcePlugin):
         if not mkimage_format:
             mkimage_format = 'i386-pc'
 
-        grub_mkimage_bios = 'grub-mkimage --prefix=/boot/grub \
+        grub_mkimage_bios = 'grub-mkimage --prefix=%s \
         --format=%s --config=%s/embed.cfg --directory=%s/grub/%s \
         --output=%s/grub-bios-core.img %s' % \
-        (mkimage_format, kernel_dir, staging_libdir,
-        mkimage_format, kernel_dir, builtin_modules)
+        (grub_prefix_pathm mkimage_format, kernel_dir,
+         staging_libdir, mkimage_format, kernel_dir,
+         builtin_modules)
 
         exec_native_cmd(grub_mkimage_bios, native_sysroot)
 
         Partition.core_img = '%s/grub-bios-core.img' % (kernel_dir)
 
     @staticmethod
-    def gen_core_img_efi(kernel_dir, native_sysroot,
-                         staging_libdir, mkimage_format):
+    def gen_core_img_efi(kernel_dir, native_sysroot, staging_libdir
+                         mkimage_format, grub_prefix_path):
 
         builtin_modules = 'boot linux ext2 fat serial part_msdos part_gpt normal \
         normal multiboot efi_gop iso9660 configfile search loadenv test'
@@ -153,11 +154,12 @@ class GrubInstall(SourcePlugin):
         if not mkimage_format:
             mkimage_format = 'x86_64-efi'
 
-        grub_mkimage_bios = 'grub-mkimage --prefix=/boot/grub \
+        grub_mkimage_bios = 'grub-mkimage --prefix=%s \
         --format=%s --config=%s/embed.cfg --directory=%s/grub/%s \
         --output=%s/grub-efi-boot.efi %s' % \
-        (mkimage_format, kernel_dir, staging_libdir,
-        mkimage_format, kernel_dir, builtin_modules)
+        (grub_prefix_pathm mkimage_format, kernel_dir,
+         staging_libdir, mkimage_format, kernel_dir,
+         builtin_modules)
 
         exec_native_cmd(grub_mkimage_bios, native_sysroot)
 
@@ -196,22 +198,22 @@ class GrubInstall(SourcePlugin):
                            "Examples:\nset GRUB_CONFIG_PATH\n" \
                            "bootloader --configfile in wks file")
 
+        cls.gen_embed_grub_cfg(kernel_dir, grub_prefix_path)
+        cls.gen_core_img_pc(kernel_dir, native_sysroot, staging_libdir,
+                            mkimage_format_pc, grub_prefix_path)
+        cls.gen_core_img_efi(kernel_dir, native_sysroot, staging_libdir,
+                             mkimage_format_pc, grub_prefix_path)
+
         cls.boot_type = boot_type
         cls.grub_cfg = grub_cfg
         cls.grub_prefix_path = grub_prefix_path
-
-        cls.gen_embed_grub_cfg(kernel_dir, grub_prefix_path)
-        cls.gen_core_img_pc(kernel_dir, native_sysroot,
-                            staging_libdir, mkimage_format_pc)
-        cls.gen_core_img_efi(kernel_dir, native_sysroot,
-                             staging_libdir, mkimage_format_pc)
 
     @classmethod
     def install_grub_cfg(cls, wdir):
         boot_types = ['uefi', 'bios', 'modules']
 
         if cls.boot_type in boot_types:
-            os.mkdir('%s/%s', wdir, cls.grub_prefix_path)
+            os.mkdir('%s/%s', wdir, cls.grub_prefix_path, exist_ok=True)
             shutil.copy(cls.grub_cfg, cls.grub_prefix_path, follow_symlink=True)
 
     @classmethod
@@ -225,13 +227,14 @@ class GrubInstall(SourcePlugin):
 
         part_img = ''
 
+        staging_libdir = get_bitbake_var('STAGING_LIBDIR')
+
         wdir = "%s/wdir" % cr_workdir
         if os.path.exists(wdir):
             shutil.rmtree(wdir)
 
         os.mkdir(wdir)
 
-        # Install grub config
         cls.install_grub_cfg(wdir)
 
         logger.debug('Prepare boot partition using rootfs in %s', wdir)
