@@ -221,8 +221,23 @@ class GrubInstall(SourcePlugin):
         boot_types = ['uefi', 'bios', 'modules']
 
         if cls.boot_type in boot_types:
-            os.mkdir('%s/%s', wdir, cls.grub_prefix_path, exist_ok=True)
-            shutil.copy(cls.grub_cfg, cls.grub_prefix_path, follow_symlink=True)
+            install_dir = '%s/%s' % (wdir, cls.grub_prefix_path)
+            os.mkdir(install_dir, exist_ok=True)
+            shutil.copy(cls.grub_cfg, install_dir, follow_symlink=True)
+
+    @classmethod
+    def install_grub_modules(cls, wdir):
+        boot_types = ['uefi', 'bios', 'modules']
+        copy_types = [ '*.mod', '*.o', '*.lst' ]
+
+        if cls.boot_type in boot_types:
+            install_dir = '%s/%s' % (wdir, cls.grub_prefix_path)
+            os.mkdir(install_dir, exist_ok=True)
+
+            for ctype in copy_types:
+                files = glob.glob('%s/%s' % (cls.staging_libdir, ctype))
+                for file in files:
+                    shutil.copy(file, install_dir, follow_symlink=True)
 
     @classmethod
     def do_prepare_partition(cls, part, source_params, creator, cr_workdir,
@@ -242,19 +257,18 @@ class GrubInstall(SourcePlugin):
         os.mkdir(wdir)
 
         cls.install_grub_cfg(wdir)
+        cls.install_grub_modules(wdir)
 
         logger.debug('Prepare boot partition using rootfs in %s', wdir)
         part.prepare_rootfs(cr_workdir, oe_builddir, wdir,
                             native_sysroot, False)
 
-        raise WicError("Succcess")
+        #du_cmd = "du -Lbks %s" % part_img
+        #out = exec_cmd(du_cmd)
+        #part_img_size = int(out.split()[0])
 
-        du_cmd = "du -Lbks %s" % part_img
-        out = exec_cmd(du_cmd)
-        part_img_size = int(out.split()[0])
-
-        part.size = part_img_size
-        part.source_file = part_img
+        #part.size = part_img_size
+        #part.source_file = part_img
 
     @classmethod
     def do_install_disk(cls, disk, disk_name, creator, workdir, oe_builddir,
@@ -277,9 +291,8 @@ class GrubInstall(SourcePlugin):
 # wics plugin no need to modify partition.py
 def prepare_rootfs_none(self, rootfs, cr_workdir, oe_builddir, rootfs_dir,                                                                                  
                         native_sysroot, pseudo):
-    core_img = self.core_img
-    if core_img:
-        shutil.copy(core_img, rootfs)
+    if self.core_img:
+        shutil.copy(self.core_img, rootfs)
 
 Partition.core_img = ''
 Partition.prepare_rootfs_none = prepare_rootfs_none
