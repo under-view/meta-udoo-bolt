@@ -103,7 +103,7 @@ class GrubInstall(SourcePlugin):
 
     grub_cfg = ''
     boot_type = ''
-    efi_format = ''
+    grub_format = ''
     staging_libdir = ''
     grub_prefix_path = ''
 
@@ -143,6 +143,7 @@ class GrubInstall(SourcePlugin):
 
         exec_native_cmd(grub_mkimage, native_sysroot)
 
+        cls.grub_format = mkimage_format
         Partition.core_img = '%s/grub-bios-core.img' % (kernel_dir)
 
     @classmethod
@@ -172,7 +173,7 @@ class GrubInstall(SourcePlugin):
 
         exec_native_cmd(grub_mkimage, native_sysroot)
 
-        cls.efi_format = mkimage_format
+        cls.grub_format = mkimage_format
 
     @classmethod
     def do_configure_partition(cls, part, source_params, creator, cr_workdir,
@@ -238,7 +239,8 @@ class GrubInstall(SourcePlugin):
             os.makedirs(install_dir, exist_ok=True)
 
             for ctype in copy_types:
-                files = glob.glob('%s/%s' % (cls.staging_libdir, ctype))
+                files = glob.glob('%s/grub/%s/%s' % \
+                    (cls.staging_libdir, cls.grub_format, ctype))
                 for file in files:
                     shutil.copy2(file, install_dir, follow_symlinks=True)
 
@@ -253,13 +255,13 @@ class GrubInstall(SourcePlugin):
             'arm64-efi'  : 'BOOTAA64.EFI',
         }
 
-        if not cls.efi_format in format_types:
+        if not cls.grub_format in format_types:
             raise WicError('Unsupported GRUB_MKIMAGE_FORMAT_EFI selected.')
 
         if cls.boot_type in boot_types:
             install_dir = '%s/EFI/BOOT' % (wdir)
             grub_efi_app = '%s/grub-efi-boot.efi' % (kernel_dir)
-            install_file = '%s/%s' % (install_dir, format_types[cls.efi_format])
+            install_file = '%s/%s' % (install_dir, format_types[cls.grub_format])
 
             os.makedirs(install_dir, exist_ok=True)
             shutil.copy2(grub_efi_app, install_file, follow_symlinks=True)
@@ -288,7 +290,25 @@ class GrubInstall(SourcePlugin):
                             native_sysroot, False)
 
     @classmethod
-    def do_install_disk(cls, disk, disk_name, creator, workdir, oe_builddir,
+    def do_install_boot_img(cls, native_sysroot, wic_image):
+        boot_types = ['bios', 'bios-hybrid', 'modules']
+        grub_path = '%s/grub/i386-pc' % (cls.staging_libdir)
+        boot_img = '%s/boot.img' % (grub_path)
+
+        if cls.boot_type in boot_types:
+            dd_cmd = 'dd if=%s of=%s conv=notrunc bs=1 seek=0 count=440' % (boot_img, wic_image)
+            exec_native_cmd(dd_cmd, native_sysroot)
+
+    @classmethod
+    def do_install_core_img(cls, kernel_dir, native_sysroot, wic_image):
+        core_img = '%s/grub-bios-core.img' % (kernel_dir)
+
+        if cls.boot_type == 'bios':
+            dd_cmd = 'dd if=%s of=%s conv=notrunc bs=1 seek=512' % (core_img, wic_image)
+            exec_native_cmd(dd_cmd, native_sysroot)
+
+    @classmethod
+    def do_install_disk(cls, disk, disk_name, creator, cr_workdir, oe_builddir,
                         bootimg_dir, kernel_dir, native_sysroot):
         """
         Called after all partitions have been prepared and assembled into a
@@ -296,13 +316,9 @@ class GrubInstall(SourcePlugin):
         utility for booting via BIOS from disk storage devices.
         """
 
-        #iso_img = "%s.p1" % disk.path
-        #full_path = creator._full_path(workdir, disk_name, "direct")
-        #full_path_iso = creator._full_path(workdir, disk_name, "iso")
-
-        #os.remove(disk.path)
-        #shutil.copy2(iso_img, full_path_iso)
-        #shutil.copy2(full_path_iso, full_path)
+        wic_image = creator._full_path(cr_workdir, disk_name, "direct")
+        cls.do_install_boot_img(native_sysroot, wic_image)
+        cls.do_install_core_img(kernel_dir, native_sysroot, wic_image)
 
 # As this change is specific to the 'grub_install'
 # wics plugin no need to modify partition.py
