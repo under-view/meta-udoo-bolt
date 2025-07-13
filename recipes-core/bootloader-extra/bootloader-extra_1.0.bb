@@ -29,3 +29,4 @@ do_deploy() {
 
 addtask do_deploy
 do_deploy[vardeps] += "KERNEL_ARGS KERNEL_IMAGETYPE"
+do_deploy[nostamp] = "1"
