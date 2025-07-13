@@ -31,7 +31,7 @@ logger.setLevel(logging.DEBUG)
 class GrubInstall(SourcePlugin):
 
     """
-    Create a bootable wic image with grub as bootloader
+    Create a bootable wic image with grub as the bootloader.
 
     This plugin populates the output wic image with necessary grub boot
     files, installs boot.img and core.img. Enables caller to boot off
@@ -101,10 +101,11 @@ class GrubInstall(SourcePlugin):
 
     name = 'grub_install'
 
-    boot_type = ''
     grub_cfg = ''
-    grub_prefix_path = ''
+    boot_type = ''
+    efi_format = ''
     staging_libdir = ''
+    grub_prefix_path = ''
 
     @staticmethod
     def gen_embed_grub_cfg(kernel_dir, grub_prefix_path):
@@ -171,6 +172,8 @@ class GrubInstall(SourcePlugin):
 
         exec_native_cmd(grub_mkimage, native_sysroot)
 
+        cls.efi_format = mkimage_format
+
     @classmethod
     def do_configure_partition(cls, part, source_params, creator, cr_workdir,
                                oe_builddir, bootimg_dir, kernel_dir,
@@ -222,8 +225,8 @@ class GrubInstall(SourcePlugin):
 
         if cls.boot_type in boot_types:
             install_dir = '%s/%s' % (wdir, cls.grub_prefix_path)
-            os.mkdir(install_dir, exist_ok=True)
-            shutil.copy(cls.grub_cfg, install_dir, follow_symlink=True)
+            os.makedirs(install_dir, exist_ok=True)
+            shutil.copy2(cls.grub_cfg, install_dir, follow_symlinks=True)
 
     @classmethod
     def install_grub_modules(cls, wdir):
@@ -232,12 +235,34 @@ class GrubInstall(SourcePlugin):
 
         if cls.boot_type in boot_types:
             install_dir = '%s/%s' % (wdir, cls.grub_prefix_path)
-            os.mkdir(install_dir, exist_ok=True)
+            os.makedirs(install_dir, exist_ok=True)
 
             for ctype in copy_types:
                 files = glob.glob('%s/%s' % (cls.staging_libdir, ctype))
                 for file in files:
-                    shutil.copy(file, install_dir, follow_symlink=True)
+                    shutil.copy2(file, install_dir, follow_symlinks=True)
+
+    @classmethod
+    def install_core_img_efi(cls, kernel_dir, wdir):
+        boot_types = ['uefi', 'hybrid-uefi']
+
+        format_types = {
+            'x86_64-efi' : 'BOOTX64.EFI',
+            'ia64-efi'   : 'BOOTIA64.EFI',
+            'arm-efi'    : 'BOOTARM.EFI',
+            'arm64-efi'  : 'BOOTAA64.EFI',
+        }
+
+        if not cls.efi_format in format_types:
+            raise WicError('Unsupported GRUB_MKIMAGE_FORMAT_EFI selected.')
+
+        if cls.boot_type in boot_types:
+            install_dir = '%s/EFI/BOOT' % (wdir)
+            grub_efi_app = '%s/grub-efi-boot.efi' % (kernel_dir)
+            install_file = '%s/%s' % (install_dir, format_types[cls.efi_format])
+
+            os.makedirs(install_dir, exist_ok=True)
+            shutil.copy2(grub_efi_app, install_file, follow_symlinks=True)
 
     @classmethod
     def do_prepare_partition(cls, part, source_params, creator, cr_workdir,
@@ -254,21 +279,13 @@ class GrubInstall(SourcePlugin):
         if os.path.exists(wdir):
             shutil.rmtree(wdir)
 
-        os.mkdir(wdir)
-
         cls.install_grub_cfg(wdir)
         cls.install_grub_modules(wdir)
+        cls.install_core_img_efi(kernel_dir, wdir)
 
         logger.debug('Prepare boot partition using rootfs in %s', wdir)
         part.prepare_rootfs(cr_workdir, oe_builddir, wdir,
                             native_sysroot, False)
-
-        #du_cmd = "du -Lbks %s" % part_img
-        #out = exec_cmd(du_cmd)
-        #part_img_size = int(out.split()[0])
-
-        #part.size = part_img_size
-        #part.source_file = part_img
 
     @classmethod
     def do_install_disk(cls, disk, disk_name, creator, workdir, oe_builddir,
@@ -289,10 +306,10 @@ class GrubInstall(SourcePlugin):
 
 # As this change is specific to the 'grub_install'
 # wics plugin no need to modify partition.py
-def prepare_rootfs_none(self, rootfs, cr_workdir, oe_builddir, rootfs_dir,                                                                                  
-                        native_sysroot, pseudo):
+def install_core_img_pc(self, rootfs, cr_workdir, oe_builddir,
+                        rootfs_dir, native_sysroot, pseudo):
     if self.core_img:
-        shutil.copy(self.core_img, rootfs)
+        shutil.copy2(self.core_img, rootfs)
 
 Partition.core_img = ''
-Partition.prepare_rootfs_none = prepare_rootfs_none
+Partition.prepare_rootfs_none = install_core_img_pc
