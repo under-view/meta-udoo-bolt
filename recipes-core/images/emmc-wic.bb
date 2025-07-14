@@ -6,16 +6,18 @@ inherit core-image image-artifact-names
 
 IMAGE_FSTYPES = "ext4 wic wic.gz wic.bmap"
 
+GRUB_CONFIG_PATH = "${DEPLOY_DIR_IMAGE}/image-boot-files/grub.cfg"
 ROOTFS ?= "${IMGDEPLOYDIR}/${IMAGE_LINK_NAME}.ext4"
 
 WICVARS:append = "\
     ROOTFS \
+    GRUB_CONFIG_PATH \
     "
 
-do_image_wic[depends] += "dosfstools-native:do_populate_sysroot \
-                          mtools-native:do_populate_sysroot \
-                          util-linux-native:do_populate_sysroot \
-                          gptfdisk-native:do_populate_sysroot \
-                          bootloader-extra:do_deploy \
-                          virtual/kernel:do_deploy \
-                          "
+do_image_wic[nostamp] = "1"
+do_image_wic[depends] += "\
+    grub-native:do_populate_sysroot \
+    grub:do_populate_sysroot \
+    grub-efi:do_populate_sysroot \
+    image-boot-files:do_deploy \
+    "
