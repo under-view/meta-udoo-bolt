@@ -50,10 +50,12 @@ class GrubInstall(SourcePlugin):
     GRUB_MKIMAGE_FORMAT_PC = 'i386-pc'
     GRUB_MKIMAGE_FORMAT_EFI = 'x86_64-efi'
     GRUB_CONFIG_PATH = "${DEPLOY_DIR_IMAGE}/grub.cfg"
+    GRUB_MODULES_EFI = "all"
 
     WICVARS:append = "\
         GRUB_CONFIG_PATH \
         GRUB_PREFIX_PATH \
+        GRUB_MODULES_EFI \
         GRUB_MKIMAGE_FORMAT_PC \
         GRUB_MKIMAGE_FORMAT_EFI \
         "
@@ -137,16 +139,16 @@ class GrubInstall(SourcePlugin):
             mkimage_format = 'i386-pc'
 
         core_img = '%s/grub-bios-core.img' % (kernel_dir)
+        grub_mods_path = '%s/grub/%s' % (cls.staging_libdir, mkimage_format)
 
         grub_mkimage = 'grub-mkimage \
         --prefix=%s \
         --format=%s \
         --config=%s/embed.cfg \
-        --directory=%s/grub/%s \
+        --directory=%s \
         --output=%s %s' % \
         (grub_prefix_path, mkimage_format, kernel_dir,
-         cls.staging_libdir, mkimage_format, core_img,
-         builtin_modules)
+         grub_mods_path, core_img, builtin_modules)
 
         exec_native_cmd(grub_mkimage, native_sysroot)
 
@@ -155,8 +157,8 @@ class GrubInstall(SourcePlugin):
         cls.grub_formats.append(mkimage_format)
 
     @classmethod
-    def gen_core_img_efi(cls, kernel_dir, native_sysroot,
-                         mkimage_format, grub_prefix_path):
+    def gen_core_img_efi(cls, kernel_dir, native_sysroot, mkimage_format,
+                         grub_prefix_path, grub_modules_efi):
         """
         Generate core.img or grub UEFI application
         that contains the embedded grub config.
@@ -173,16 +175,27 @@ class GrubInstall(SourcePlugin):
             mkimage_format = 'x86_64-efi'
 
         core_img = '%s/grub-efi-boot.efi' % (kernel_dir)
+        grub_mods_path = '%s/grub/%s' % (cls.staging_libdir, mkimage_format)
+
+        if grub_modules_efi:
+            if grub_modules_efi == 'all':
+                builtin_modules = ''
+                files = glob.glob('%s/*.mod' % (grub_mods_path))
+                for file in files:
+                    builtin_modules += '%s ' % os.path.basename(file).removesuffix('.mod')
+            else:
+                builtin_modules = grub_modules_efi
+
+        logger.debug('builtin_modules = %s' % (builtin_modules))
 
         grub_mkimage = 'grub-mkimage \
         --prefix=%s \
         --format=%s \
         --config=%s/embed.cfg \
-        --directory=%s/grub/%s \
+        --directory=%s \
         --output=%s %s' % \
         (grub_prefix_path, mkimage_format, kernel_dir,
-         cls.staging_libdir, mkimage_format, core_img,
-         builtin_modules)
+         grub_mods_path, core_img, builtin_modules)
 
         exec_native_cmd(grub_mkimage, native_sysroot)
 
@@ -205,6 +218,7 @@ class GrubInstall(SourcePlugin):
 
         # Optional variables
         grub_cfg = get_bitbake_var('GRUB_CONFIG_PATH')
+        grub_modules_efi = get_bitbake_var('GRUB_MODULES_EFI')
         grub_prefix_path = get_bitbake_var('GRUB_PREFIX_PATH')
         mkimage_format_pc = get_bitbake_var('GRUB_MKIMAGE_FORMAT_PC')
         mkimage_format_efi = get_bitbake_var('GRUB_MKIMAGE_FORMAT_EFI')
@@ -232,7 +246,8 @@ class GrubInstall(SourcePlugin):
         cls.gen_core_img_pc(kernel_dir, native_sysroot,
                             mkimage_format_pc, grub_prefix_path)
         cls.gen_core_img_efi(kernel_dir, native_sysroot,
-                             mkimage_format_pc, grub_prefix_path)
+                             mkimage_format_pc, grub_prefix_path,
+                             grub_modules_efi)
 
     @classmethod
     def install_grub_cfg(cls, wdir):
