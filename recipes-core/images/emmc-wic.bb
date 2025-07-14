@@ -14,6 +14,7 @@ WICVARS:append = "\
     GRUB_CONFIG_PATH \
     "
 
+do_image_wic[nostamp] = "1"
 do_image_wic[depends] += "\
     grub-native:do_populate_sysroot \
     grub:do_populate_sysroot \
