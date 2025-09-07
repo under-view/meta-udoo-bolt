@@ -1,1 +1,1 @@
-part /boot --label LIVEUSB --ondisk cd --source liveusb-isohybrid --sourceparams="loaders=grub-efi|syslinux"
+part /boot --label LIVEUSB --source liveusb_isohybrid --sourceparams="loaders=grub-efi|syslinux"
