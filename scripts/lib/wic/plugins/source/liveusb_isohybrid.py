@@ -233,6 +233,10 @@ class LiveusbIsohybrid(SourcePlugin):
         iso_img = "%s/tempiso_img.iso" % cr_workdir
         cls._create_iso_image(isodir, iso_img, native_sysroot, part)
 
+        isohybrid_cmd = "isohybrid -u %s" % iso_img
+        logger.debug("running command: %s", isohybrid_cmd)
+        exec_native_cmd(isohybrid_cmd, native_sysroot)
+
         du_cmd = "du -Lbks %s" % iso_img
         out = exec_cmd(du_cmd)
         isoimg_size = int(out.split()[0])
@@ -250,19 +254,21 @@ class LiveusbIsohybrid(SourcePlugin):
         """
 
         iso_img = "%s.p1" % disk.path
-        full_path = creator._full_path(workdir, disk_name, "direct")
-        full_path_iso = creator._full_path(workdir, disk_name, "iso")
+        wic_image = creator._full_path(workdir, disk_name, "direct")
 
-        isohybrid_cmd = "isohybrid -u %s" % iso_img
-        logger.debug("running command: %s", isohybrid_cmd)
-        exec_native_cmd(isohybrid_cmd, native_sysroot)
+        dd_cmd = "dd if=%s of=%s conv=notrunc" % (iso_img, wic_image)
+        exec_cmd(dd_cmd, native_sysroot)
 
-        # Replace the image created by direct plugin with the one created by
-        # mkisofs command. This is necessary because the iso image created by
-        # mkisofs has a very specific MBR is system area of the ISO image, and
-        # direct plugin adds and configures an another MBR.
-        logger.debug("Replacing the image created by direct plugin\n")
+        # Doesn't account for logical partitions at the moment.
+        fdisk_str = ''
+        for part in creator.parts:
+            size = part.size if part.size else part.fixed_size
+            if part.num != 1:
+                fdisk_str += 'n\np\n%d\n%d\n%d\n' % \
+                    (part.num + 1, part.start, size)
 
-        os.remove(disk.path)
-        shutil.copy2(iso_img, full_path_iso)
-        shutil.copy2(full_path_iso, full_path)
+        if fdisk_str:
+            fdisk_str += 'w\n'
+            fdisk_cmd = "echo -ne '%s' | fdisk %s" % (fdisk_str, wic_image)
+            logger.debug("running command: %s", fdisk_cmd)
+            exec_native_cmd(fdisk_cmd, native_sysroot)
