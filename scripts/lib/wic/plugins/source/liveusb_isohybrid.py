@@ -43,13 +43,13 @@ class LiveusbIsohybrid(SourcePlugin):
     bootloader files.
 
     Example kickstart file:
-    part /boot --source liveusb-isohybrid --sourceparams="loaders=grub-efi|syslinux"
+    part /boot --label LIVEUSB --source liveusb_isohybrid --sourceparams="loaders=grub-efi|syslinux"
 
     NOT FULLY SUPPORTED YET
-    part /boot --source liveusb-isohybrid --sourceparams="loaders=systemd-boot|syslinux"
+    part /boot --label LIVEUSB --source liveusb_isohybrid --sourceparams="loaders=systemd-boot|syslinux"
     """
 
-    name = 'liveusb-isohybrid'
+    name = 'liveusb_isohybrid'
 
     @staticmethod
     def _install_syslinux(isodir, kernel_dir, bootimg_dir):
@@ -192,37 +192,6 @@ class LiveusbIsohybrid(SourcePlugin):
         shutil.copy(initrd_install, isodir + "/initrd-install", follow_symlinks=True)
 
     @staticmethod
-    def _install_grub(isodir, kernel_dir, native_sysroot):
-        grub_bios_dir = "%s/grub-bios" % (kernel_dir)
-        if os.path.isdir(grub_bios_dir):
-            cp_cmd = "cp -ra %s %s" % (grub_bios_dir, isodir)
-            exec_native_cmd(cp_cmd, native_sysroot)
-
-        grub_efi_dir = "%s/grub-efi" % (kernel_dir)
-        if os.path.isdir(grub_efi_dir):
-            cp_cmd = "cp -ra %s %s" % (grub_efi_dir, isodir)
-            exec_native_cmd(cp_cmd, native_sysroot)
-
-    @staticmethod
-    def _install_image_boot_files(isodir, kernel_dir, native_sysroot):
-        image_boot_files_dir = "%s/image-boot-files" % (kernel_dir)
-        if os.path.isdir(image_boot_files_dir):
-            cp_cmd = "cp -ra %s %s" % (image_boot_files_dir, isodir)
-            exec_native_cmd(cp_cmd, native_sysroot)
-
-    @staticmethod
-    def _install_emmc_wic(isodir, kernel_dir, native_sysroot):
-        emmc_wic = "%s/../udoo-bolt-emmc/emmc-wic-udoo-bolt-emmc.rootfs.wic.gz" % (kernel_dir)
-        if os.path.isfile(emmc_wic):
-            cp_cmd = "cp -a -L %s %s" % (emmc_wic, isodir)
-            exec_native_cmd(cp_cmd, native_sysroot)
-
-        emmc_wic_bmap = "%s/../udoo-bolt-emmc/emmc-wic-udoo-bolt-emmc.rootfs.wic.bmap" % (kernel_dir)
-        if os.path.isfile(emmc_wic_bmap):
-            cp_cmd = "cp -a -L %s %s 2>/dev/null" % (emmc_wic_bmap, isodir)
-            exec_native_cmd(cp_cmd, native_sysroot)
-
-    @staticmethod
     def _create_iso_image(isodir, iso_img, native_sysroot, part):
         iso_bootimg = "isolinux/isolinux.bin"
         iso_bootcat = "isolinux/boot.cat"
@@ -260,9 +229,6 @@ class LiveusbIsohybrid(SourcePlugin):
         cls._install_syslinux(isodir, kernel_dir, bootimg_dir)
         cls._install_kernel(isodir, kernel_dir)
         cls._install_initrd(isodir, kernel_dir)
-        cls._install_grub(isodir, kernel_dir, native_sysroot)
-        cls._install_image_boot_files(isodir, kernel_dir, native_sysroot)
-        cls._install_emmc_wic(isodir, kernel_dir, native_sysroot)
 
         iso_img = "%s/tempiso_img.iso" % cr_workdir
         cls._create_iso_image(isodir, iso_img, native_sysroot, part)
