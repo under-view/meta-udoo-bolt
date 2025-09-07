@@ -7,8 +7,7 @@ SRC_URI = "\
     file://flash.sh \
     "
 
-S = "${WORKDIR}/sources"
-UNPACKDIR = "${S}"
+S = "${UNPACKDIR}"
 
 RDEPENDS:${PN} += "\
     bmaptool \
@@ -21,8 +20,8 @@ do_install() {
     install -m 0755 -d ${D}/dev ${D}/mnt ${D}/run ${D}/usr
     install -m 1777 -d ${D}/tmp
     install -m 0644 -d ${D}/usr/local/bin
-    install -m 0755 ${UNPACKDIR}/init-boot.sh ${D}/init
-    install -m 0755 ${UNPACKDIR}/flash.sh ${D}/usr/local/bin
+    install -m 0755 ${S}/init-boot.sh ${D}/init
+    install -m 0755 ${S}/flash.sh ${D}/usr/local/bin
     mknod -m 622 ${D}/dev/console c 5 1
 }
 
