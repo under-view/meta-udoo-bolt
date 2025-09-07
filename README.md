@@ -18,10 +18,10 @@ page](https://github.com/under-view/meta-udoo-bolt/wiki).
 $ bitbake-layers add-layer ../meta-udoo-bolt
 
 # Require by liveusb-wic for the installation of system image
-$ MACHINE="udoo-bolt-emmc" DISTRO="udoo" bitbake emmc-wic
+$ MACHINE="udoo-bolt-emmc" bitbake emmc-wic
 
 # Liveusb can ether install emmc-wic or run standalone
-$ MACHINE="udoo-bolt-live-usb" DISTRO="udoo" bitbake liveusb-wic
+$ MACHINE="udoo-bolt-live-usb" bitbake liveusb-wic
 ```
 
 ## Flashing
