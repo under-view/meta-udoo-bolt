@@ -17,8 +17,6 @@ do_image_wic[depends] += "dosfstools-native:do_populate_sysroot \
                           util-linux-native:do_populate_sysroot \
                           syslinux-native:do_populate_sysroot \
                           ${MLPREFIX}syslinux:do_populate_sysroot \
-                          grub-efi:do_deploy \
-                          grub:do_deploy \
                           bootloader-extra:do_deploy \
                           image-boot-files:do_deploy \
                           virtual/kernel:do_deploy \
