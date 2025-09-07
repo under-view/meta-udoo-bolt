@@ -3,10 +3,6 @@
 count=0
 rootdev_found=0
 
-efi_dir="/tmp/efi"
-data_dir="/tmp/data"
-grub_modules="normal part_msdos part_gpt multiboot"
-
 if [ ! -b "${rootdev}" ]; then
 	echo "Waiting for ${rootdev}..."
 	while [ $count -ne 10 ]; do
@@ -26,10 +22,10 @@ if [ ! -b "${rootdev}" ]; then
 	fi
 fi
 
-bmaptool copy --bmap "${liveusb_mnt}/emmc-wic-udoo-bolt-emmc.rootfs.wic.bmap" \
-		     "${liveusb_mnt}/emmc-wic-udoo-bolt-emmc.rootfs.wic.gz" \
-		     "${rootdev}" || \
+bmap_file=$(ls ${liveusb_mnt}/*.wic.bmap)
+wic_file=$(ls ${liveusb_mnt}/*.wic.gz)
+bmaptool copy --bmap "${bmap_file}" "${wic_file}" "${rootdev}" ||  \
 {
-	echo "[x] bmaptool: copy ${liveusb_mnt}/emmc-wic-udoo-bolt-emmc.rootfs.wic.gz -> ${rootdev} failed"
+	echo "[x] bmaptool: copy ${wic_file} -> ${rootdev} failed"
 	exec sh
 }
