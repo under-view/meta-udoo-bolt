@@ -1,1 +1,3 @@
 part /boot --label LIVEUSB --source liveusb_isohybrid --sourceparams="loaders=grub-efi|syslinux"
+part / --label IMAGES --fstype ext4 --source copy_direct
+bootloader --ptable msdos --source liveusb_isohybrid
