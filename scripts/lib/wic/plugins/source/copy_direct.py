@@ -4,13 +4,11 @@
 # SPDX-License-Identifier: GPL-2.0-only
 #
 # DESCRIPTION
-# This implements the 'x64-liveusb-isohybrid' source plugin class for 'wic'
-# Searches for most files in deploy directory of a given MACHINE.
+# Given a list of files and directories copy them
+# into a partition.
 #
 # AUTHORS
 # Vincent Davis Jr <vince (at] underview.tech>
-#
-# Based on oe-core isoimage-isohybrid
 
 import glob
 import logging
