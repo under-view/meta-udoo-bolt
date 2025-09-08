@@ -262,10 +262,10 @@ class LiveusbIsohybrid(SourcePlugin):
         # Doesn't account for logical partitions at the moment.
         fdisk_str = ''
         for part in creator.parts:
-            size = part.size if part.size else part.fixed_size
             if part.num != 1:
-                fdisk_str += 'n\np\n%d\n%d\n%d\n' % \
-                    (part.num + 1, part.start, size)
+                logger.debug("size = %s", part.size)
+                fdisk_str += 'n\np\n%d\n%d\n+%dK\n' % \
+                    (part.num + 1, part.start, part.size-1)
 
         if fdisk_str:
             fdisk_str += 'w\n'
