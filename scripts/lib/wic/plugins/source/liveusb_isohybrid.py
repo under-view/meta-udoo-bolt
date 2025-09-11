@@ -262,13 +262,12 @@ class LiveusbIsohybrid(SourcePlugin):
         # Doesn't account for logical partitions at the moment.
         fdisk_str = ''
         for part in creator.parts:
-            if part.num != 1:
-                logger.debug("size = %s", part.size)
-                fdisk_str += 'n\np\n%d\n%d\n+%dK\n' % \
-                    (part.num + 1, part.start, part.size-1)
+            if part.num > 1:
+                fdisk_str += 'n\np\n%d\n%d\n+%d\n' % \
+                    (part.num + 1, part.start, part.size_sec-1)
 
         if fdisk_str:
             fdisk_str += 'w\n'
-            fdisk_cmd = "echo -ne '%s' | fdisk %s" % (fdisk_str, wic_image)
+            fdisk_cmd = 'echo -e "%s" | fdisk %s' % (fdisk_str, wic_image)
             logger.debug("running command: %s", fdisk_cmd)
             exec_native_cmd(fdisk_cmd, native_sysroot)
