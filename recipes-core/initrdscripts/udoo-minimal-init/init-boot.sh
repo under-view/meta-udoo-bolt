@@ -23,10 +23,10 @@ while true; do
 	sleep 0.1
 done
 
-# Mount liveusb
-mount -v "${liveusb}1" "${liveusb_mnt}" || \
-{
-	echo "[x] mount: ${liveusb}1 ${liveusb_mnt} failed"
+# Mount liveusb IMAGES partition
+liveusb_mnt_part="/dev/$(lsblk -lo NAME,LABEL | grep IMAGES | awk '{print $1}')"
+mount -v "${liveusb_mnt_part}" "${liveusb_mnt}" || {
+	echo "[x] mount: ${liveusb_mnt_part} ${liveusb_mnt} failed"
 	exec sh
 }
 
