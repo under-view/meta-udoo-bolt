@@ -17,7 +17,7 @@ do_deploy() {
     install -m 0644 ${THISDIR}/files/grub.cfg ${DEPLOYDIR}/image-boot-files
 
     sed -i -e "s#@KERNEL_IMAGETYPE@#${KERNEL_IMAGETYPE}#g" \
-           -e "s#@KERNEL_ARGS@#${EMMC_KERNEL_ARGS}#g" \
+           -e "s#@KERNEL_ARGS@#${KERNEL_ARGS}#g" \
               ${DEPLOYDIR}/image-boot-files/grub.cfg
 }
 
