@@ -19,7 +19,7 @@ TINY_LINUX_CFG_PROTO ?= "protocol=https"
 TINY_LINUX_CFG_URL ?= "git://git@github.com/under-view/tiny-linux-kconfigs.git"
 TINY_LINUX_EXTRA = "type=kmeta;name=tiny;destsuffix=tiny-linux-kconfigs"
 
-SRCREV_tiny:amd ?= "7cf0f7c538c58b03069c0983573f61fac9624865"
+SRCREV_tiny:amd ?= "4277405c0e15a66468ae9776459c90297104347c"
 
 FILESEXTRAPATHS:prepend := "${UNPACKDIR}/tiny-linux-kconfigs/linux-6.12:"
 
