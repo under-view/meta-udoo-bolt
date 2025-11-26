@@ -17,6 +17,8 @@ SRCREV_meta:amd ?= "6a551cd6cf63d4199bc51ef778692f23730dbcca"
 
 DEPENDS += "tiny-linux-kconfigs-native"
 
+KBUILD_DEFCONFIG = "tiny.config"
+
 KCONFIG_SYMBOLS:amd ?= "\
     ${@bb.utils.contains('ACPI_DEBUG', '1', 'acpi-debug.cfg', '', d)} \
     ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'systemd.cfg', '', d)} \
