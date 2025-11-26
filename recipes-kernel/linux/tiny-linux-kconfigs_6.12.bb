@@ -10,8 +10,8 @@ SRCREV ?= "4277405c0e15a66468ae9776459c90297104347c"
 S = "${UNPACKDIR}/${BPN}-${PV}"
 
 do_install() {
-    install -d ${D}${datadir}/tiny-linux-kconfigs
-    cp -r ${S}/* ${D}${datadir}/tiny-linux-kconfigs
+    install -d ${D}${datadir}/linux-cfgs-${PV}
+    cp -r ${S}/linux-${PV}/* ${D}${datadir}/linux-cfgs-${PV}
 }
 
-BBCLASSEXTENDS += "native"
+BBCLASSEXTEND += "native"
