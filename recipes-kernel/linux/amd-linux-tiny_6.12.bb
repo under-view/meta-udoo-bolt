@@ -5,7 +5,7 @@ SECTION = "kernel"
 LICENSE = "GPL-2.0-with-Linux-syscall-note"
 HOMEPAGE = "https://www.yoctoproject.org/"
 
-LIC_FILES_CHKSUM ?= "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
+LIC_FILES_CHKSUM ?= "file://COPYING;md5=6bc538ed5bd9a7fc9398086aedcd7e46"
 
 UPSTREAM_CHECK_GITTAGREGEX = "(?P<pver>\d+\.\d+(\.\d+)*)"
 
@@ -58,10 +58,11 @@ INC_PR := "r0"
 PR := "${INC_PR}.1"
 PV = "${LINUX_VERSION}+git"
 
-KBRANCH:amd ?= "branch=v6.12/standard/tiny/base"
-LINUX_SRC = "git://git.yoctoproject.org/linux-yocto.git"
-SRC_URI = "${LINUX_SRC};protocol=https;${KBRANCH}"
-SRCREV ?= "081aa259b8f0252bfc7999b289b79bf129893498"
+KPROTOCOL ?= "protocol=https"
+KBRANCH:amd ?= "tag=v6.12;mindepth=1;nobranch=1"
+KSRC ?= "git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git"
+SRCREV ?= "adc218676eef25575469234709c2d87185ca223a"
+SRC_URI = "${KSRC};${KPROTOCOL};${KBRANCH}"
 
 LINUX_KERNEL_TYPE = "tiny"
 KCONFIG_MODE = "--allnoconfig"
