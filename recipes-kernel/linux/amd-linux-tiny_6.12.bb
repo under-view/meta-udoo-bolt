@@ -49,6 +49,9 @@ do_kernel_configme[depends] += '${@bb.utils.contains("KERNEL_DEBUG", "True", "pa
 
 EXTRA_OEMAKE += '${@bb.utils.contains("KERNEL_DEBUG", "True", "", "PAHOLE=false", d)}'
 
+# Fixes builds with GCC 15+
+KERNEL_CC:append = " -std=gnu17"
+
 COMPATIBLE_MACHINE = "${MACHINE}"
 
 KERNEL_VERSION_SANITY_SKIP ?= "1"
