@@ -29,3 +29,5 @@ XSERVER ?= "\
     "
 
 OPENGLX_FEATURE_ENABLED ?= "${@bb.utils.contains('DISTRO_FEATURES', 'opengl x11', 'true', 'false', d)}"
+
+INITRAMFS_FSTYPE ?= "cpio.xz"
