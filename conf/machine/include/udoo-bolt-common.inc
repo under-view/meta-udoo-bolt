@@ -1,4 +1,4 @@
-PREFERRED_PROVIDER_virtual/kernel ?= "linux-yocto"
+PREFERRED_PROVIDER_virtual/kernel ?= "amd-linux-tiny"
 PREFERRED_VERSION_linux-yocto ?= "6.12%"
 PREFERRED_VERSION_linux-yocto-rt ?= "6.12%"
 PREFERRED_PROVIDER_jpeg ?= "jpeg"
@@ -29,3 +29,5 @@ XSERVER ?= "\
     "
 
 OPENGLX_FEATURE_ENABLED ?= "${@bb.utils.contains('DISTRO_FEATURES', 'opengl x11', 'true', 'false', d)}"
+
+INITRAMFS_FSTYPE ?= "cpio.xz"

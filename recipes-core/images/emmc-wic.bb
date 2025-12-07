@@ -9,6 +9,8 @@ IMAGE_FSTYPES = "ext4 wic wic.gz wic.bmap"
 GRUB_CONFIG_PATH = "${DEPLOY_DIR_IMAGE}/image-boot-files/grub.cfg"
 ROOTFS ?= "${IMGDEPLOYDIR}/${IMAGE_LINK_NAME}.ext4"
 
+IMAGE_INSTALL += "kernel-image"
+
 WICVARS:append = "\
     ROOTFS \
     GRUB_CONFIG_PATH \

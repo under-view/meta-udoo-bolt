@@ -184,10 +184,11 @@ class LiveusbIsohybrid(SourcePlugin):
     def _install_initrd(isodir, kernel_dir):
         machine = get_bitbake_var("MACHINE")
         initrd_name = get_bitbake_var("INITRD")
+        initrd_fstype = get_bitbake_var("INITRAMFS_FSTYPE")
         initrd_install_name = get_bitbake_var("INITRD_INSTALL")
 
-        initrd = "%s/%s-%s.rootfs.cpio.gz" % (kernel_dir,initrd_name,machine)
-        initrd_install = "%s/%s-%s.rootfs.cpio.gz" % (kernel_dir,initrd_install_name,machine)
+        initrd = "%s/%s-%s.rootfs.%s" % (kernel_dir,initrd_name,machine,initrd_fstype)
+        initrd_install = "%s/%s-%s.rootfs.%s" % (kernel_dir,initrd_install_name,machine,initrd_fstype)
         shutil.copy(initrd, isodir + "/initrd", follow_symlinks=True)
         shutil.copy(initrd_install, isodir + "/initrd-install", follow_symlinks=True)
 
