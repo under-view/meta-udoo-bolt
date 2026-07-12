@@ -17,7 +17,7 @@ UDOO_BOLT_ESSENTIAL_EXTRA_RDEPENDS ?= ""
 # on the AMD chips which causes some build time failures.
 MACHINE_FEATURES:remove = "qemu-usermode"
 MACHINE_FEATURES += "wifi efi"
-MACHINE_EXTRA_RRECOMMENDS += "kernel-modules alsa-utils"
+MACHINE_EXTRA_RRECOMMENDS += "${KERNEL_PACKAGE_NAME}-modules alsa-utils"
 MACHINE_EXTRA_RRECOMMENDS += "grub parted util-linux-blkid"
 MACHINE_ESSENTIAL_EXTRA_RDEPENDS = "linux-firmware-amdgpu ${UDOO_BOLT_ESSENTIAL_EXTRA_RDEPENDS}"
 
