@@ -1,7 +1,7 @@
 # meta-udoo-bolt
 
-BSP designed specifically for the UDOO bolt (AMD Ryzen™ Embedded V1000 SoC). Useful notes can be found on the [wiki
-page](https://github.com/under-view/meta-udoo-bolt/wiki).
+Example distro layer designed specifically for the UDOO bolt (AMD Ryzen™ Embedded V1000 SoC).
+Useful notes can be found on the [wiki page](https://github.com/under-view/meta-udoo-bolt/wiki).
 
 ## Dependencies
 
