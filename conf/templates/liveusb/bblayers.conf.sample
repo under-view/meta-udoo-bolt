@@ -1,0 +1,9 @@
+BBLAYERS ?= " \
+    ${SOURCES_DIR}/openembedded-core/meta \
+    ${SOURCES_DIR}/openembedded-core/meta-selftest \
+    ${SOURCES_DIR}/meta-openembedded/meta-oe \
+    ${SOURCES_DIR}/meta-openembedded/meta-python \
+    ${SOURCES_DIR}/meta-openembedded/meta-networking \
+    ${SOURCES_DIR}/meta-amd-embed \
+    ${SOURCES_DIR}/meta-udoo-bolt \
+    "
