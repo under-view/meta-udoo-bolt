@@ -25,19 +25,20 @@ Recommend using an underview [yocto project container](https://github.com/under-
 $ setup-oe-env liveusb
 
 # Liveusb will build emmc-wic and place into images partition
-$ MACHINE="udoo-bolt-live-usb" bitbake liveusb-wic
+$ bitbake liveusb-wic
 ```
 
 ```bash
 $ setup-oe-env emmc
 
 # Emmc wic may be built standalone
-$ MACHINE="udoo-bolt-emmc" bitbake emmc-wic
+$ bitbake emmc-wic
 ```
 
 **Without Container**
 
 ```bash
+$ bitbake-layers add-layer ../meta-amd-embed
 $ bitbake-layers add-layer ../meta-udoo-bolt
 
 # Emmc wic may be built standalone
