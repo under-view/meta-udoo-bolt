@@ -12,7 +12,9 @@
 # the option is a question of removing the # character and making any change to the
 # variable as required.
 
-DISTRO ?= ""
+DISTRO ??= ""
+
+MACHINE = "udoo-bolt-live-usb"
 
 #
 # Where to place downloads
