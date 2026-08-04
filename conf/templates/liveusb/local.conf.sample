@@ -15,6 +15,7 @@
 DISTRO ??= ""
 
 MACHINE = "udoo-bolt-live-usb"
+BBMULTICONFIG = "emmc liveusb-install"
 
 #
 # Where to place downloads
