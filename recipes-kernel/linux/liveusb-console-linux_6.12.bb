@@ -1,5 +1,5 @@
 require recipes-kernel/linux/amd-linux-tiny.inc
 
-SRCREV ?= "adc218676eef25575469234709c2d87185ca223a"
+LINUX_VERSION = "6.12.101"
 
-LINUX_VERSION ?= "6.12.58"
+# SRCREV = "0afbc63c0f3f35ebf104b5a0b5af3284539b3d58"
