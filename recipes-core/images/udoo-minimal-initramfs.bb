@@ -1,1 +1,1 @@
-require ./udoo-minimal-initramfs.inc
+inherit amd-image-initramfs

@@ -1,5 +1,5 @@
-require ./udoo-minimal-initramfs.inc
+inherit amd-image-initramfs
 
-INITRAMFS_SCRIPTS:append = "\
+AMD_INSTALL = "\
     udoo-minimal-init \
     "
