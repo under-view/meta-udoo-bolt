@@ -1,0 +1,1 @@
+inherit amd-image-rootfs
