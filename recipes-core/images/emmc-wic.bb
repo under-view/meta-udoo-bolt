@@ -1,27 +1,11 @@
-SUMMARY = "Final emmc wic image"
+inherit amd-image-wic
 
-LICENSE = "MIT"
-
-inherit core-image image-artifact-names
-
-IMAGE_FSTYPES = "ext4 wic wic.gz wic.bmap"
-
-GRUB_CONFIG_PATH = "${DEPLOY_DIR_IMAGE}/image-boot-files/grub.cfg"
-ROOTFS ?= "${IMGDEPLOYDIR}/${IMAGE_LINK_NAME}.ext4"
-
-IMAGE_NAME_SUFFIX = ""
-
-IMAGE_INSTALL += "${KERNEL_PACKAGE_NAME}-image"
-
-WICVARS:append = "\
-    ROOTFS \
-    GRUB_CONFIG_PATH \
+AMD_IMAGE_DEPENDS = "\
+    emmc-rootfs \
     "
 
-do_image_wic[nostamp] = "1"
-do_image_wic[depends] += "\
-    grub-native:do_populate_sysroot \
-    grub:do_populate_sysroot \
-    grub-efi:do_populate_sysroot \
-    image-boot-files:do_deploy \
+EMMC_ROOTFS = "emmc-rootfs-${MACHINE}.ext4"
+
+WICVARS:append = "\
+    EMMC_ROOTFS \
     "
