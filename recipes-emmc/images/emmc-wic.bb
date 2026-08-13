@@ -7,6 +7,7 @@ AMD_IMAGE_DEPENDS = "\
 EMMC_ROOTFS = "emmc-rootfs-${MACHINE}.ext4"
 
 WICVARS:append = "\
+    GRUB_CONFIG_FILE \
     EMMC_ROOTFS \
     "
 

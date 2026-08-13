@@ -3,4 +3,4 @@ part bios_boot  --label bios_boot  --fstype none --fixed-size 1M  --part-type 21
 part efi_system --label efi_system --fstype vfat --fixed-size 48M --part-type C12A7328-F81F-11D2-BA4B-00A0C93EC93B --source grub_install --sourceparams="boot_type=hybrid-uefi"
 part grub_data  --label grub_data  --fstype ext4 --fixed-size 78M --part-type 0FC63DAF-8483-4772-8E79-3D69D8477DE4 --source grub_install --sourceparams="boot_type=modules"
 part roots      --label rootfs     --fstype ext4 --part-type 0FC63DAF-8483-4772-8E79-3D69D8477DE4 --source rawcopy --sourceparams="file=${EMMC_ROOTFS}"
-bootloader --ptable gpt --source grub-install
+bootloader --ptable gpt --source grub-install --configfile "${GRUB_CONFIG_FILE}"

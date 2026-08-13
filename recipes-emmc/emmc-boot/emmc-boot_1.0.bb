@@ -16,11 +16,11 @@ do_deploy() {
 
     install -m 0644 \
             ${THISDIR}/files/grub.cfg \
-            ${DEPLOYDIR}/emmc-grub.cfg
+            ${DEPLOYDIR}/${GRUB_CONFIG_FILE}
 
     sed -i -e "s#@KERNEL_IMAGETYPE@#${KERNEL_IMAGETYPE}#g" \
            -e "s#@KERNEL_ARGS@#${KERNEL_ARGS}#g" \
-              ${DEPLOYDIR}/emmc-grub.cfg
+              ${DEPLOYDIR}/${GRUB_CONFIG_FILE}
 }
 
 addtask do_deploy
