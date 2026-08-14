@@ -26,7 +26,7 @@ do_image_wic[depends] += "dosfstools-native:do_populate_sysroot \
                           util-linux-native:do_populate_sysroot \
                           syslinux-native:do_populate_sysroot \
                           ${MLPREFIX}syslinux:do_populate_sysroot \
-                          bootloader-extra:do_deploy \
+                          liveusb-boot:do_deploy \
                           virtual/kernel:do_deploy \
                           ${@'%s:do_image_complete' % d.getVar('INITRD') if d.getVar('INITRD') else ''} \
                           ${@'%s:do_image_complete' % d.getVar('INITRD_INSTALL') if d.getVar('INITRD_INSTALL') else ''} \
