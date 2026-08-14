@@ -4,8 +4,8 @@ INITRD ?= "${MLPREFIX}udoo-minimal-initramfs"
 INITRD_INSTALL ?= "${MLPREFIX}udoo-minimal-initramfs-install"
 
 COPY_DIRECT_ENTRIES = "\
-    ${DEPLOY_DIR}/images/udoo-bolt-emmc/emmc-wic-udoo-bolt-emmc.rootfs.wic.gz; \
-    ${DEPLOY_DIR}/images/udoo-bolt-emmc/emmc-wic-udoo-bolt-emmc.rootfs.wic.bmap; \
+    ${EMMC_DEPLOY_IMAGE_DIR}/emmc-wic-udoo-bolt-emmc.wic.gz; \
+    ${EMMC_DEPLOY_IMAGE_DIR}/emmc-wic-udoo-bolt-emmc.wic.bmap; \
     "
 
 WICVARS:append = "\
