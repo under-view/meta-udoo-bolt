@@ -1,10 +1,4 @@
-SUMMARY = "Final liveusb wic image"
-
-LICENSE = "MIT"
-
-inherit core-image image-artifact-names
-
-IMAGE_FSTYPES = "ext4 wic wic.gz wic.bmap"
+inherit amd-image-wic
 
 INITRD ?= "${MLPREFIX}udoo-minimal-initramfs"
 INITRD_INSTALL ?= "${MLPREFIX}udoo-minimal-initramfs-install"
