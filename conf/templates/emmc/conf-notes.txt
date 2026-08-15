@@ -3,10 +3,13 @@
 You can now run 'bitbake <target>'
 
 Common targets are:
-	MC:DISTRO:SYSTEM_IMAGE
+	DISTRO:SYSTEM_IMAGE
 
-	mc:emmc:emmc-wic
-	mc:liveusb:liveusb-wic
+	emmc:emmc-wic
+
+Common Commands are:
+
+	bitbake emmc-wic
 
 You can also run generated qemu images with a command like 'runqemu qemux86-64'.
 
