@@ -5,9 +5,10 @@ COPY_DIRECT_ENTRIES = "\
     ${EMMC_DEPLOY_IMAGE_DIR}/emmc-wic-udoo-bolt-emmc.wic.bmap; \
     "
 
-WICVARS:append = "\
-    COPY_DIRECT_ENTRIES \
-    "
+LIVEUSB_INITRAMFS = "1"
+# Can be kernel + initramfs or kernel + initrd
+LIVEUSB_CONSOLE = "bzImage-initramfs-${MACHINE}.bin"
+LIVEUSB_INSTALL = "bzImage-initramfs-install-${MACHINE}.bin"
 
 do_image_wic[mcdepends] += "\
     mc:::virtual/kernel:do_deploy \
