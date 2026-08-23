@@ -15,16 +15,6 @@ do_deploy() {
     install -d ${DEPLOYDIR}
 
     install -m 0644 "${THISDIR}/files/amd.jpg" ${DEPLOYDIR}
-    install -m 0644 "${THISDIR}/files/grub.cfg" ${DEPLOYDIR}/liveusb-grub.cfg
-    install -m 0644 "${THISDIR}/files/isolinux.cfg" ${DEPLOYDIR}/liveusb-isolinux.cfg
-
-    sed -i -e "s#@KERNEL_IMAGETYPE@#${KERNEL_IMAGETYPE}#g" \
-           -e "s#@KERNEL_ARGS@#${KERNEL_ARGS}#g" \
-              ${DEPLOYDIR}/liveusb-grub.cfg
-
-    sed -i -e "s#@KERNEL_IMAGETYPE@#${KERNEL_IMAGETYPE}#g" \
-           -e "s#@KERNEL_ARGS@#${KERNEL_ARGS}#g" \
-              ${DEPLOYDIR}/liveusb-isolinux.cfg
 }
 
 addtask do_deploy
