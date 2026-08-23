@@ -1,9 +1,6 @@
 inherit amd-liveusb-wic
 
-COPY_DIRECT_ENTRIES = "\
-    ${EMMC_DEPLOY_IMAGE_DIR}/emmc-wic-udoo-bolt-emmc.wic.gz; \
-    ${EMMC_DEPLOY_IMAGE_DIR}/emmc-wic-udoo-bolt-emmc.wic.bmap; \
-    "
+COPY_DIRECT_ENTRIES = "${AMD_ARTIFACTS_DIR}"
 
 LIVEUSB_INITRAMFS = "1"
 # Can be kernel + initramfs or kernel + initrd
