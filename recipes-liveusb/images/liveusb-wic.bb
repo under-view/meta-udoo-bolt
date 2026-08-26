@@ -8,6 +8,10 @@ LIVEUSB_CONSOLE = "bzImage-initramfs-liveusb-console-${MACHINE}.bin"
 LIVEUSB_INSTALL = "bzImage-initramfs-liveusb-install-${MACHINE}.bin"
 LIVEUSB_INSTALL_DEPLOY_DIR_IMAGE = "${TMPDIR}-liveusb-install/deploy/images/${MACHINE}"
 
+WICVARS:append = "\
+    COPY_DIRECT_ENTRIES \
+    "
+
 do_image_wic[mcdepends] += "\
     mc:::virtual/kernel:do_deploy \
     mc::liveusb-install:virtual/kernel:do_deploy \
