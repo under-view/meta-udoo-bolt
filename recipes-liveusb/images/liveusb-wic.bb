@@ -4,6 +4,7 @@ COPY_DIRECT_ENTRIES = "${AMD_ARTIFACTS_DIR}"
 
 LIVEUSB_INITRAMFS = "1"
 LIVEUSB_SPLASH = "amd.jpg"
+LIVEUSB_KERNEL_ARGS = "${KERNEL_ARGS}"
 # Can be kernel + initramfs or kernel + initrd
 LIVEUSB_CONSOLE = "bzImage-initramfs-liveusb-console-${MACHINE}.bin"
 LIVEUSB_INSTALL = "bzImage-initramfs-liveusb-install-${MACHINE}.bin"
