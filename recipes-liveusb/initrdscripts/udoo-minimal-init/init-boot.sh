@@ -10,8 +10,6 @@ mount -t sysfs sysfs -o nosuid,nodev,noexec /sys
 rootfs_mnt="/tmp/rootfs-mnt"
 liveusb_mnt="/tmp/mnt"
 
-rootdev="$(awk -F 'BOLT_BLOCK_DEVICE=' '{print $2}' /proc/cmdline | cut -d " " -f1)"
-
 mkdir -p "${rootfs_mnt}"
 mkdir -p "${liveusb_mnt}"
 
