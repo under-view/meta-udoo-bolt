@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--https://manpages.ubuntu.com/manpages/impish/man1/repo-manifest.1.html-->
+<manifest>
+	<remote name="origin" revision="master" fetch="ssh://git@github.com" />
+	<project path="sources/meta-amd-embed" name="under-view/meta-amd-embed" remote="origin" />
+	<project path="sources/meta-udoo-bolt" name="under-view/meta-udoo-bolt" remote="origin" />
+
+	<remote name="git-oe-org" revision="master" fetch="https://git.openembedded.org/" />
+	<project path="sources/bitbake" name="bitbake" remote="git-oe-org" />
+	<project path="sources/openembedded-core" name="openembedded-core" remote="git-oe-org" />
+	<project path="sources/meta-openembedded" name="meta-openembedded" remote="git-oe-org" />
+
+	<remote name="git-yocto-org" revision="master" fetch="https://git.yoctoproject.org/" />
+	<project path="sources/wic" name="wic" remote="git-yocto-org" />
+</manifest>
