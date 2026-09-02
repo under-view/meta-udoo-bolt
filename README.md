@@ -22,6 +22,15 @@ Recommend using an underview [yocto project container](https://github.com/under-
 **With Container**
 
 ```bash
+# Cloning repos
+$ curl "https://storage.googleapis.com/git-repo-downloads/repo" > repo
+$ chmod a+x repo
+
+$ ./repo init -u https://github.com/under-view/meta-udoo-bolt -b master -m sources.xml
+$ ./repo sync
+```
+
+```bash
 $ setup-oe-env liveusb
 
 # Liveusb will build emmc-wic and place into images partition
