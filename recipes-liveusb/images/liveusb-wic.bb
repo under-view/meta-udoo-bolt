@@ -11,7 +11,7 @@ LIVEUSB_CONSOLE = "bzImage-initramfs-liveusb-console-${MACHINE}.bin"
 LIVEUSB_INSTALL = "bzImage-initramfs-liveusb-install-${MACHINE}.bin"
 LIVEUSB_INSTALL_DEPLOY_DIR_IMAGE = "${TMPDIR}-liveusb-install/deploy/images/${MACHINE}"
 
-IMAGE_POSTPROCESS_COMMAND:remove = "gen_build_artifact_dir;"
+IMAGE_POSTPROCESS_COMMAND:remove = "gen_build_artifact_dir"
 
 WICVARS:append = "\
     COPY_DIRECT_ENTRIES \
